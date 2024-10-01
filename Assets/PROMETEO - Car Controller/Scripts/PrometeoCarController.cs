@@ -638,9 +638,10 @@ public class PrometeoCarController : MonoBehaviour
     // This function is used to make the car lose traction. By using this, the car will start drifting. The amount of traction lost
     // will depend on the handbrakeDriftMultiplier variable. If this value is small, then the car will not drift too much, but if
     // it is high, then you could make the car to feel like going on ice.
-    public void Handbrake(){
+    public void Handbrake()
+    {
       CancelInvoke("RecoverTraction");
-      // We are going to start losing traction smoothly, there is were our 'driftingAxis' variable takes
+      // We are going to start losing traction smoothly, there is where our 'driftingAxis' variable takes
       // place. This variable will start from 0 and will reach a top value of 1, which means that the maximum
       // drifting value has been reached. It will increase smoothly by using the variable Time.deltaTime.
       driftingAxis = driftingAxis + (Time.deltaTime);
@@ -652,14 +653,14 @@ public class PrometeoCarController : MonoBehaviour
       if(driftingAxis > 1f){
         driftingAxis = 1f;
       }
-      //If the forces aplied to the rigidbody in the 'x' asis are greater than
+      //If the forces applied to the rigidbody in the 'x' axis are greater than
       //3f, it means that the car lost its traction, then the car will start emitting particle systems.
       if(Mathf.Abs(localVelocityX) > 2.5f){
         isDrifting = true;
       }else{
         isDrifting = false;
       }
-      //If the 'driftingAxis' value is not 1f, it means that the wheels have not reach their maximum drifting
+      //If the 'driftingAxis' value is not 1f, it means that the wheels have not reached their maximum drifting
       //value, so, we are going to continue increasing the sideways friction of the wheels until driftingAxis
       // = 1f.
       if(driftingAxis < 1f){
@@ -676,11 +677,14 @@ public class PrometeoCarController : MonoBehaviour
         rearRightCollider.sidewaysFriction = RRwheelFriction;
       }
 
+      // Apply brake torque to the rear wheels
+      rearLeftCollider.brakeTorque = brakeForce;
+      rearRightCollider.brakeTorque = brakeForce;
+
       // Whenever the player uses the handbrake, it means that the wheels are locked, so we set 'isTractionLocked = true'
-      // and, as a consequense, the car starts to emit trails to simulate the wheel skids.
+      // and, as a consequence, the car starts to emit trails to simulate the wheel skids.
       isTractionLocked = true;
       DriftCarPS();
-
     }
 
     // This function is used to emit both the particle systems of the tires' smoke and the trail renderers of the tire skids
