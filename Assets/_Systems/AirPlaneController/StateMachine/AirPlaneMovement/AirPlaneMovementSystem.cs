@@ -39,8 +39,8 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
             Light[] turbineLights = _airPlaneConfig.TurbineLights;
             float propelSpeedMultiplier = _airPlaneConfig.PropelSpeedMultiplier;
             
-            float currentSpeed = _airPlaneStats.CurrentSpeed;
-            float currentEngineLightIntensity = _airPlaneStats.CurrentEngineLightIntensity;
+            float currentSpeed = _airPlaneStats.currentSpeed;
+            float currentEngineLightIntensity = _airPlaneStats.currentEngineLightIntensity;
 
             if (propellers.Length > 0)
             {

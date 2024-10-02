@@ -101,13 +101,29 @@ namespace AirPlaneController.AirPlaneInfo
 
         [SerializeField] private Light[] turbineLights;
 
-        [Header("Colliders")]
-        [SerializeField] private Transform crashCollidersRoot;
-
         [Header("Takeoff settings")]
         [Tooltip("How far must the plane be from the runway before it can be controlled again")]
         [SerializeField] private float takeoffLenght = 30f;
 
+        public void Initialize(
+            Transform transform,
+            Rigidbody rigidbody,
+            List<AirPlaneCollider> airPlaneColliders,
+            AudioSource engineSoundSource,
+            TrailRenderer[] wingTrailEffects,
+            Light[] turbineLights,
+            Transform[] propellers
+        )
+        {
+            _transform = transform;
+            _rigidbody = rigidbody;
+            _airPlaneColliders = airPlaneColliders;
+            
+            this.engineSoundSource = engineSoundSource;
+            this.wingTrailEffects = wingTrailEffects;
+            this.turbineLights = turbineLights;
+            this.propellers = propellers;
+        }
         
         #region Properties
         
@@ -174,8 +190,6 @@ namespace AirPlaneController.AirPlaneInfo
         public float TurbineLightTurbo => turbineLightTurbo;
 
         public Light[] TurbineLights => turbineLights;
-
-        public Transform CrashCollidersRoot => crashCollidersRoot;
 
         public float TakeoffLenght => takeoffLenght;
 

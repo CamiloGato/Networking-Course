@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8d1e521e25e4c679268c29ae1beba37, type: 3}
+  m_Name: AirPlaneConfig
+  m_EditorClassIdentifier: 
+  trailThickness: 0.045
+  wingTrailEffects: []
+  yawSpeed: 50
+  pitchSpeed: 100
+  rollSpeed: 200
+  yawTurboMultiplier: 0.3
+  pitchTurboMultiplier: 0.5
+  rollTurboMultiplier: 1
+  speedMultiplier: 1
+  defaultSpeed: 10
+  turboSpeed: 20
+  accelerating: 10
+  deAccelerating: 5
+  turboHeatingSpeed: 0
+  turboCooldownSpeed: 0
+  turboOverheatOver: 0
+  sidewaysMovement: 15
+  sidewaysMovementXRot: 0.012
+  sidewaysMovementYRot: 1.5
+  sidewaysMovementYPos: 0.1
+  engineSoundSource: {fileID: 0}
+  maxEngineSound: 1
+  defaultSoundPitch: 1
+  turboSoundPitch: 1.5
+  propelSpeedMultiplier: 100
+  propellers: []
+  turbineLightDefault: 1
+  turbineLightTurbo: 5
+  turbineLights: []
+  crashCollidersRoot: {fileID: 0}
+  takeoffLenght: 30

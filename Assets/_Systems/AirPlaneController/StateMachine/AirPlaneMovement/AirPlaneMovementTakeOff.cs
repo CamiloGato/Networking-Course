@@ -18,13 +18,13 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
             TurnOnPropellersAndLights();
 
             // Accelerating
-            if (AirPlaneStats.CurrentSpeed < AirPlaneConfig.TurboSpeed)
+            if (AirPlaneStats.currentSpeed < AirPlaneConfig.TurboSpeed)
             {
-                AirPlaneStats.CurrentSpeed += (AirPlaneConfig.Accelerating * 2f) * Time.deltaTime;
+                AirPlaneStats.currentSpeed += (AirPlaneConfig.Accelerating * 2f) * Time.deltaTime;
             }
 
             // Move Forward
-            AirPlaneConfig.Transform.Translate(Vector3.forward * AirPlaneStats.CurrentSpeed * Time.deltaTime);
+            AirPlaneConfig.Transform.Translate(Vector3.forward * AirPlaneStats.currentSpeed * Time.deltaTime);
             
         }
 

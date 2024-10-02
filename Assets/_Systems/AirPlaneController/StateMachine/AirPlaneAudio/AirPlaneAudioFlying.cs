@@ -19,7 +19,7 @@ namespace AirPlaneController.StateMachine.AirPlaneAudio
             
             AudioSource engineSoundSource = AirPlaneConfig.EngineSoundSource;
             float maxEngineSound = AirPlaneConfig.MaxEngineSound;
-            float currentEngineSoundPitch = AirPlaneStats.CurrentEngineSoundPitch;
+            float currentEngineSoundPitch = AirPlaneStats.currentEngineSoundPitch;
             
             engineSoundSource.pitch = Mathf.Lerp(engineSoundSource.pitch, currentEngineSoundPitch, 10f * Time.deltaTime);
             engineSoundSource.volume = Mathf.Lerp(engineSoundSource.volume, maxEngineSound, 1f * Time.deltaTime);

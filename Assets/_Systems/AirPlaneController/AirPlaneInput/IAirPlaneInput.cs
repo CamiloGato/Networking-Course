@@ -1,4 +1,4 @@
-﻿namespace AirPlaneController.Subsystems.AirPlaneInput
+﻿namespace AirPlaneController.AirPlaneInput
 {
     public interface IAirPlaneInput
     {

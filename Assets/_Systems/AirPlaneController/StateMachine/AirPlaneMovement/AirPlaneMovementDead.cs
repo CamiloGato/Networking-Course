@@ -16,7 +16,7 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
             AirPlaneConfig.Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             
             //Add last speed to rb
-            AirPlaneConfig.Rigidbody.AddForce(AirPlaneConfig.Transform.forward * AirPlaneStats.LastEngineSpeed, ForceMode.VelocityChange);
+            AirPlaneConfig.Rigidbody.AddForce(AirPlaneConfig.Transform.forward * AirPlaneStats.lastEngineSpeed, ForceMode.VelocityChange);
         }
 
         public override void UpdateSystem()

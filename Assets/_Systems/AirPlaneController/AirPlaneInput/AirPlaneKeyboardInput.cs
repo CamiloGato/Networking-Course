@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using AirPlaneController.AirPlaneInput;
+using UnityEngine;
 
 namespace AirPlaneController.Subsystems.AirPlaneInput
 {

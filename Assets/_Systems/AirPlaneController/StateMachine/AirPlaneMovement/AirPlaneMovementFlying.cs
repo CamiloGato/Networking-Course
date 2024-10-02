@@ -1,5 +1,5 @@
 ﻿using AirPlaneController.AirPlaneInfo;
-using AirPlaneController.Subsystems.AirPlaneInput;
+using AirPlaneController.AirPlaneInput;
 using UnityEngine;
 
 namespace AirPlaneController.StateMachine.AirPlaneMovement
@@ -22,9 +22,10 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
         public override void UpdateSystem()
         {
             TurnOnPropellersAndLights();
+            SidewaysForce();
             Movement();
             
-            if (_airPlaneInput.Turbo() && !AirPlaneStats.TurboOverheat)
+            if (_airPlaneInput.Turbo() && !AirPlaneStats.turboOverheat)
             {
                 Turbo();
             }
@@ -44,30 +45,31 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
         private void Movement()
         {
             //Move forward
-            AirPlaneConfig.Transform.Translate(Vector3.forward * AirPlaneStats.CurrentSpeed * Time.deltaTime);
+            AirPlaneConfig.Transform.Translate(Vector3.forward * (AirPlaneStats.currentSpeed * Time.deltaTime));
 
             //Store last speed
-            AirPlaneStats.LastEngineSpeed = AirPlaneStats.CurrentSpeed;
+            AirPlaneStats.lastEngineSpeed = AirPlaneStats.currentSpeed;
 
             //Rotate airplane by inputs
             AirPlaneConfig.Transform.Rotate(
-                Vector3.forward * -_airPlaneInput.Horizontal() * AirPlaneStats.CurrentRollSpeed * Time.deltaTime
+                Vector3.forward * (-_airPlaneInput.Horizontal() * AirPlaneStats.currentRollSpeed * Time.deltaTime)
                 );
             AirPlaneConfig.Transform.Rotate(
-                Vector3.right * _airPlaneInput.Vertical() * AirPlaneStats.CurrentPitchSpeed * Time.deltaTime
+                Vector3.right * (_airPlaneInput.Vertical() * AirPlaneStats.currentPitchSpeed * Time.deltaTime)
                 );
 
             //Rotate yaw
-            AirPlaneConfig.Transform.Rotate(Vector3.up * AirPlaneStats.CurrentYawSpeed * Time.deltaTime);
+            float yaw = _airPlaneInput.Yaw();
+            AirPlaneConfig.Transform.Rotate(Vector3.up * (AirPlaneStats.currentYawSpeed * yaw * Time.deltaTime));
 
             //Accelerate and de accelerate
-            if ( AirPlaneStats.CurrentSpeed < AirPlaneStats.MaxSpeed)
+            if ( AirPlaneStats.currentSpeed < AirPlaneStats.maxSpeed)
             {
-                AirPlaneStats.CurrentSpeed += AirPlaneConfig.Accelerating * Time.deltaTime;
+                AirPlaneStats.currentSpeed += AirPlaneConfig.Accelerating * Time.deltaTime;
             }
             else
             {
-                AirPlaneStats.CurrentSpeed -= AirPlaneConfig.DeAccelerating * Time.deltaTime;
+                AirPlaneStats.currentSpeed -= AirPlaneConfig.DeAccelerating * Time.deltaTime;
             }
             
         }
@@ -75,68 +77,118 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
         private void Turbo()
         {
             //Turbo overheating
-            if(AirPlaneStats.TurboHeat > 100f)
+            if(AirPlaneStats.turboHeat > 100f)
             {
-                AirPlaneStats.TurboHeat = 100f;
-                AirPlaneStats.TurboOverheat = true;
+                AirPlaneStats.turboHeat = 100f;
+                AirPlaneStats.turboOverheat = true;
             }
             else
             {
                 //Add turbo heat
-                AirPlaneStats.TurboHeat += Time.deltaTime * AirPlaneConfig.TurboHeatingSpeed;
+                AirPlaneStats.turboHeat += Time.deltaTime * AirPlaneConfig.TurboHeatingSpeed;
             }
 
             //Set speed to turbo speed and rotation to turbo values
-            AirPlaneStats.MaxSpeed = AirPlaneConfig.TurboSpeed;
-            AirPlaneStats.CurrentYawSpeed = AirPlaneConfig.YawSpeed * AirPlaneConfig.YawTurboMultiplier;
-            AirPlaneStats.CurrentPitchSpeed = AirPlaneConfig.PitchSpeed * AirPlaneConfig.PitchTurboMultiplier;
-            AirPlaneStats.CurrentRollSpeed = AirPlaneConfig.RollSpeed * AirPlaneConfig.RollTurboMultiplier;
+            AirPlaneStats.maxSpeed = AirPlaneConfig.TurboSpeed;
+            AirPlaneStats.currentYawSpeed = AirPlaneConfig.YawSpeed * AirPlaneConfig.YawTurboMultiplier;
+            AirPlaneStats.currentPitchSpeed = AirPlaneConfig.PitchSpeed * AirPlaneConfig.PitchTurboMultiplier;
+            AirPlaneStats.currentRollSpeed = AirPlaneConfig.RollSpeed * AirPlaneConfig.RollTurboMultiplier;
 
             //Engine lights
-            AirPlaneStats.CurrentEngineLightIntensity = AirPlaneConfig.TurbineLightTurbo;
+            AirPlaneStats.currentEngineLightIntensity = AirPlaneConfig.TurbineLightTurbo;
 
             //Effects
             ChangeWingTrailEffectThickness(AirPlaneConfig.TrailThickness);
 
             //Audio
-            AirPlaneStats.CurrentEngineSoundPitch = AirPlaneConfig.TurboSoundPitch;
+            AirPlaneStats.currentEngineSoundPitch = AirPlaneConfig.TurboSoundPitch;
         }
         
         private void TurboCooldown()
         {
-            if(AirPlaneStats.TurboHeat > 0f)
+            if(AirPlaneStats.turboHeat > 0f)
             {
-                AirPlaneStats.TurboHeat -= Time.deltaTime * AirPlaneConfig.TurboCooldownSpeed;
+                AirPlaneStats.turboHeat -= Time.deltaTime * AirPlaneConfig.TurboCooldownSpeed;
             }
             else
             {
-                AirPlaneStats.TurboHeat = 0f;
+                AirPlaneStats.turboHeat = 0f;
             }
 
             //Turbo cooldown
-            if (AirPlaneStats.TurboOverheat)
+            if (AirPlaneStats.turboOverheat)
             {
-                if(AirPlaneStats.TurboHeat <= AirPlaneConfig.TurboOverheatOver)
+                if(AirPlaneStats.turboHeat <= AirPlaneConfig.TurboOverheatOver)
                 {
-                    AirPlaneStats.TurboOverheat = false;
+                    AirPlaneStats.turboOverheat = false;
                 }
             }
 
             //Speed and rotation normal
-            AirPlaneStats.MaxSpeed = AirPlaneConfig.DefaultSpeed * AirPlaneConfig.SpeedMultiplier;
+            AirPlaneStats.maxSpeed = AirPlaneConfig.DefaultSpeed * AirPlaneConfig.SpeedMultiplier;
 
-            AirPlaneStats.CurrentYawSpeed = AirPlaneConfig.YawSpeed;
-            AirPlaneStats.CurrentPitchSpeed = AirPlaneConfig.PitchSpeed;
-            AirPlaneStats.CurrentRollSpeed = AirPlaneConfig.RollSpeed;
+            AirPlaneStats.currentYawSpeed = AirPlaneConfig.YawSpeed;
+            AirPlaneStats.currentPitchSpeed = AirPlaneConfig.PitchSpeed;
+            AirPlaneStats.currentRollSpeed = AirPlaneConfig.RollSpeed;
 
             //Engine lights
-            AirPlaneStats.CurrentEngineLightIntensity = AirPlaneConfig.TurbineLightDefault;
+            AirPlaneStats.currentEngineLightIntensity = AirPlaneConfig.TurbineLightDefault;
 
             //Effects
             ChangeWingTrailEffectThickness(0f);
 
             //Audio
-            AirPlaneStats.CurrentEngineSoundPitch = AirPlaneConfig.DefaultSoundPitch;
+            AirPlaneStats.currentEngineSoundPitch = AirPlaneConfig.DefaultSoundPitch;
+        }
+        
+        private void SidewaysForce()
+        {
+            float multiplierXRot = AirPlaneConfig.SidewaysMovement * AirPlaneConfig.SidewaysMovementXRot;
+            float multiplierYRot = AirPlaneConfig.SidewaysMovement * AirPlaneConfig.SidewaysMovementYRot;
+
+            float multiplierYPos = AirPlaneConfig.SidewaysMovement * AirPlaneConfig.SidewaysMovementYPos;
+
+            //Right side 
+            if (AirPlaneConfig.Transform.localEulerAngles.z > 270f && AirPlaneConfig.Transform.localEulerAngles.z < 360f)
+            {
+                float angle = (AirPlaneConfig.Transform.localEulerAngles.z - 270f) / (360f - 270f);
+                float invert = 1f - angle;
+
+                AirPlaneConfig.Transform.Rotate(Vector3.up * (invert * multiplierYRot * Time.deltaTime));
+                AirPlaneConfig.Transform.Rotate(Vector3.right * (-invert * multiplierXRot * AirPlaneStats.currentPitchSpeed * Time.deltaTime));
+
+                AirPlaneConfig.Transform.Translate(AirPlaneConfig.Transform.up * (invert * multiplierYPos * Time.deltaTime));
+            }
+
+            //Left side
+            if (AirPlaneConfig.Transform.localEulerAngles.z > 0f && AirPlaneConfig.Transform.localEulerAngles.z < 90f)
+            {
+                float angle = AirPlaneConfig.Transform.localEulerAngles.z / 90f;
+
+                AirPlaneConfig.Transform.Rotate(-Vector3.up * (angle * multiplierYRot * Time.deltaTime));
+                AirPlaneConfig.Transform.Rotate(Vector3.right * (-angle * multiplierXRot * AirPlaneStats.currentPitchSpeed * Time.deltaTime));
+
+                AirPlaneConfig.Transform.Translate(AirPlaneConfig.Transform.up * (angle * multiplierYPos * Time.deltaTime));
+            }
+
+            //Right side down
+            if (AirPlaneConfig.Transform.localEulerAngles.z > 90f && AirPlaneConfig.Transform.localEulerAngles.z < 180f)
+            {
+                float angle = (AirPlaneConfig.Transform.localEulerAngles.z - 90f) / (180f - 90f);
+                float invert = 1f - angle;
+
+                AirPlaneConfig.Transform.Translate(AirPlaneConfig.Transform.up * (invert * multiplierYPos * Time.deltaTime));
+                AirPlaneConfig.Transform.Rotate(Vector3.right * (-invert * multiplierXRot * AirPlaneStats.currentPitchSpeed * Time.deltaTime));
+            }
+
+            //Left side down
+            if (AirPlaneConfig.Transform.localEulerAngles.z > 180f && AirPlaneConfig.Transform.localEulerAngles.z < 270f)
+            {
+                float angle = (AirPlaneConfig.Transform.localEulerAngles.z - 180f) / (270f - 180f);
+
+                AirPlaneConfig.Transform.Translate(AirPlaneConfig.Transform.up * (angle * multiplierYPos * Time.deltaTime));
+                AirPlaneConfig.Transform.Rotate(Vector3.right * (-angle * multiplierXRot * AirPlaneStats.currentPitchSpeed * Time.deltaTime));
+            }
         }
         
     }

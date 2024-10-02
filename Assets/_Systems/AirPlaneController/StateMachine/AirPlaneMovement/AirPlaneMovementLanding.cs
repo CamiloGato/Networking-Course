@@ -19,7 +19,7 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
             ChangeWingTrailEffectThickness(0f);
             
             // Stop Speed
-            AirPlaneStats.CurrentSpeed = Mathf.Lerp(AirPlaneStats.CurrentSpeed, 0f, 1f * Time.deltaTime);
+            AirPlaneStats.currentSpeed = Mathf.Lerp(AirPlaneStats.currentSpeed, 0f, 1f * Time.deltaTime);
             
             // Set local rotation to zero
             AirPlaneConfig.Transform.localRotation = Quaternion.Lerp(
