@@ -3,10 +3,11 @@ using UnityEngine;
 
 namespace AirPlaneController.StateMachine.AirPlaneAudio
 {
-    public class AirPlaneAudioTakeOff : AirPlaneSystem
+    public class AirPlaneAudioTakeOff : AirPlaneAudioSystem
     {
-        private AirPlaneConfig _airPlaneConfig;
-        
+        public AirPlaneAudioTakeOff(AirPlaneConfig airPlaneConfig, AirPlaneStats airPlaneStats)
+            : base(airPlaneConfig, airPlaneStats) {}
+
         public override void StartSystem()
         {
             
@@ -14,9 +15,9 @@ namespace AirPlaneController.StateMachine.AirPlaneAudio
 
         public override void UpdateSystem()
         {
-            AudioSource engineSoundSource = _airPlaneConfig.EngineSoundSource;
-            float turboSoundPitch = _airPlaneConfig.TurboSoundPitch;
-            float maxEngineSound = _airPlaneConfig.MaxEngineSound;
+            AudioSource engineSoundSource = AirPlaneConfig.EngineSoundSource;
+            float turboSoundPitch = AirPlaneConfig.TurboSoundPitch;
+            float maxEngineSound = AirPlaneConfig.MaxEngineSound;
             
             engineSoundSource.pitch = Mathf.Lerp(engineSoundSource.pitch, turboSoundPitch, 1f * Time.deltaTime);
             engineSoundSource.volume = Mathf.Lerp(engineSoundSource.volume, maxEngineSound, 1f * Time.deltaTime);
