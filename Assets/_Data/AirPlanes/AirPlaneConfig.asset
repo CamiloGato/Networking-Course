@@ -13,33 +13,31 @@ MonoBehaviour:
   m_Name: AirPlaneConfig
   m_EditorClassIdentifier: 
   trailThickness: 0.045
-  wingTrailEffects: []
-  yawSpeed: 50
-  pitchSpeed: 100
-  rollSpeed: 200
-  yawTurboMultiplier: 0.3
+  wingTrailEffects:
+  - {fileID: 0}
+  - {fileID: 0}
+  yawSpeed: 10
+  pitchSpeed: 25
+  rollSpeed: 40
+  yawTurboMultiplier: 0.5
   pitchTurboMultiplier: 0.5
-  rollTurboMultiplier: 1
+  rollTurboMultiplier: 0.5
   speedMultiplier: 1
-  defaultSpeed: 10
-  turboSpeed: 20
-  accelerating: 10
-  deAccelerating: 5
+  defaultSpeed: 30
+  turboSpeed: 50
+  accelerating: 8
+  deAccelerating: 1
   turboHeatingSpeed: 0
   turboCooldownSpeed: 0
   turboOverheatOver: 0
   sidewaysMovement: 15
-  sidewaysMovementXRot: 0.012
-  sidewaysMovementYRot: 1.5
-  sidewaysMovementYPos: 0.1
-  engineSoundSource: {fileID: 0}
+  sidewaysMovementXRot: 0.0351
+  sidewaysMovementYRot: 0.88
+  sidewaysMovementYPos: 0.033
   maxEngineSound: 1
   defaultSoundPitch: 1
   turboSoundPitch: 1.5
   propelSpeedMultiplier: 100
-  propellers: []
   turbineLightDefault: 1
   turbineLightTurbo: 5
-  turbineLights: []
-  crashCollidersRoot: {fileID: 0}
   takeoffLenght: 30

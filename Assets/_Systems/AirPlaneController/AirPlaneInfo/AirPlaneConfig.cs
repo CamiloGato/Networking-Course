@@ -13,7 +13,7 @@ namespace AirPlaneController.AirPlaneInfo
         [Header("Wing trail effects")]
         [Range(0.01f, 1f)]
         [SerializeField] private float trailThickness = 0.045f;
-        [SerializeField] private TrailRenderer[] wingTrailEffects;
+        private TrailRenderer[] _wingTrailEffects;
 
         [Header("Rotating speeds")]
         [Range(5f, 500f)]
@@ -82,15 +82,15 @@ namespace AirPlaneController.AirPlaneInfo
         [SerializeField] private float sidewaysMovementYPos = 0.1f;
 
         [Header("Engine sound settings")]
-        [SerializeField] private AudioSource engineSoundSource;
         [SerializeField] private float maxEngineSound = 1f;
         [SerializeField] private float defaultSoundPitch = 1f;
         [SerializeField] private float turboSoundPitch = 1.5f;
+        private AudioSource _engineSoundSource;
 
         [Header("Engine propellers settings")]
         [Range(10f, 10000f)]
         [SerializeField] private float propelSpeedMultiplier = 100f;
-        [SerializeField] private Transform[] propellers;
+        private Transform[] _propellers;
 
         [Header("Turbine light settings")]
         [Range(0.1f, 20f)]
@@ -98,8 +98,7 @@ namespace AirPlaneController.AirPlaneInfo
 
         [Range(0.1f, 20f)]
         [SerializeField] private float turbineLightTurbo = 5f;
-
-        [SerializeField] private Light[] turbineLights;
+        private Light[] _turbineLights;
 
         [Header("Takeoff settings")]
         [Tooltip("How far must the plane be from the runway before it can be controlled again")]
@@ -119,10 +118,10 @@ namespace AirPlaneController.AirPlaneInfo
             _rigidbody = rigidbody;
             _airPlaneColliders = airPlaneColliders;
             
-            this.engineSoundSource = engineSoundSource;
-            this.wingTrailEffects = wingTrailEffects;
-            this.turbineLights = turbineLights;
-            this.propellers = propellers;
+            _engineSoundSource = engineSoundSource;
+            _wingTrailEffects = wingTrailEffects;
+            _turbineLights = turbineLights;
+            _propellers = propellers;
         }
         
         #region Properties
@@ -135,7 +134,7 @@ namespace AirPlaneController.AirPlaneInfo
 
         public float TrailThickness => trailThickness;
 
-        public TrailRenderer[] WingTrailEffects => wingTrailEffects;
+        public TrailRenderer[] WingTrailEffects => _wingTrailEffects;
 
         public float YawSpeed => yawSpeed;
 
@@ -173,7 +172,7 @@ namespace AirPlaneController.AirPlaneInfo
 
         public float SidewaysMovementYPos => sidewaysMovementYPos;
 
-        public AudioSource EngineSoundSource => engineSoundSource;
+        public AudioSource EngineSoundSource => _engineSoundSource;
 
         public float MaxEngineSound => maxEngineSound;
 
@@ -183,13 +182,13 @@ namespace AirPlaneController.AirPlaneInfo
 
         public float PropelSpeedMultiplier => propelSpeedMultiplier;
 
-        public Transform[] Propellers => propellers;
+        public Transform[] Propellers => _propellers;
 
         public float TurbineLightDefault => turbineLightDefault;
 
         public float TurbineLightTurbo => turbineLightTurbo;
 
-        public Light[] TurbineLights => turbineLights;
+        public Light[] TurbineLights => _turbineLights;
 
         public float TakeoffLenght => takeoffLenght;
 
