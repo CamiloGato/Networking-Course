@@ -1,7 +1,6 @@
-﻿using AirPlaneController.AirPlaneInput;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace AirPlaneController.Subsystems.AirPlaneInput
+namespace AirPlaneController.AirPlaneInput
 {
     public class AirPlaneKeyboardInput : IAirPlaneInput
     {

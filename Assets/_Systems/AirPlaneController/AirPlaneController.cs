@@ -5,7 +5,6 @@ using AirPlaneController.StateMachine;
 using AirPlaneController.StateMachine.AirPlaneAudio;
 using AirPlaneController.StateMachine.AirPlaneMovement;
 using AirPlaneController.StateMachine.AirPlaneStates;
-using AirPlaneController.Subsystems.AirPlaneInput;
 using UnityEngine;
 
 namespace AirPlaneController
