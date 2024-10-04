@@ -12,9 +12,12 @@ namespace AirPlaneController
     public class AirPlaneController : MonoBehaviour
     {
         private IAirPlaneInput _input;
+        [Header("AirPlane Config")]
         [SerializeField] private AirPlaneConfig airPlaneConfig;
-        [SerializeField] private List<AirPlaneCollider> airPlaneColliders;
         [SerializeField] private AirPlaneStats airPlaneStats;
+        [Space(20)]
+        [Header("AirPlane Components")]
+        [SerializeField] private List<AirPlaneCollider> airPlaneColliders;
         [SerializeField] private AudioSource engineSoundSource;
         [SerializeField] private TrailRenderer[] trailRenderer;
         [SerializeField] private Light[] turbineLights;

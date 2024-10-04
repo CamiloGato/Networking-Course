@@ -6,10 +6,6 @@ namespace AirPlaneController.AirPlaneInfo
     [CreateAssetMenu(fileName = "AirPlaneConfig", menuName = "AirPlane/Config", order = 0)]
     public class AirPlaneConfig : ScriptableObject
     {
-        private Transform _transform;
-        private Rigidbody _rigidbody;
-        private List<AirPlaneCollider> _airPlaneColliders;
-        
         [Header("Wing trail effects")]
         [Range(0.01f, 1f)]
         [SerializeField] private float trailThickness = 0.045f;
@@ -103,7 +99,11 @@ namespace AirPlaneController.AirPlaneInfo
         [Header("Takeoff settings")]
         [Tooltip("How far must the plane be from the runway before it can be controlled again")]
         [SerializeField] private float takeoffLenght = 30f;
-
+        
+        private Transform _transform;
+        private Rigidbody _rigidbody;
+        private List<AirPlaneCollider> _airPlaneColliders;
+        
         public void Initialize(
             Transform transform,
             Rigidbody rigidbody,

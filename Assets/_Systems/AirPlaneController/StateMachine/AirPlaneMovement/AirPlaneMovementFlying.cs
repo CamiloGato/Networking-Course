@@ -149,7 +149,7 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
             float multiplierYPos = AirPlaneConfig.SidewaysMovement * AirPlaneConfig.SidewaysMovementYPos;
 
             //Right side 
-            if (AirPlaneConfig.Transform.localEulerAngles.z > 270f && AirPlaneConfig.Transform.localEulerAngles.z < 360f)
+            if (AirPlaneConfig.Transform.localEulerAngles.z is > 270f and < 360f)
             {
                 float angle = (AirPlaneConfig.Transform.localEulerAngles.z - 270f) / (360f - 270f);
                 float invert = 1f - angle;
@@ -161,7 +161,7 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
             }
 
             //Left side
-            if (AirPlaneConfig.Transform.localEulerAngles.z > 0f && AirPlaneConfig.Transform.localEulerAngles.z < 90f)
+            if (AirPlaneConfig.Transform.localEulerAngles.z is > 0f and < 90f)
             {
                 float angle = AirPlaneConfig.Transform.localEulerAngles.z / 90f;
 
@@ -172,7 +172,7 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
             }
 
             //Right side down
-            if (AirPlaneConfig.Transform.localEulerAngles.z > 90f && AirPlaneConfig.Transform.localEulerAngles.z < 180f)
+            if (AirPlaneConfig.Transform.localEulerAngles.z is > 90f and < 180f)
             {
                 float angle = (AirPlaneConfig.Transform.localEulerAngles.z - 90f) / (180f - 90f);
                 float invert = 1f - angle;
@@ -182,7 +182,7 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
             }
 
             //Left side down
-            if (AirPlaneConfig.Transform.localEulerAngles.z > 180f && AirPlaneConfig.Transform.localEulerAngles.z < 270f)
+            if (AirPlaneConfig.Transform.localEulerAngles.z is > 180f and < 270f)
             {
                 float angle = (AirPlaneConfig.Transform.localEulerAngles.z - 180f) / (270f - 180f);
 

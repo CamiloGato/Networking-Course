@@ -24,7 +24,7 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
             }
 
             // Move Forward
-            AirPlaneConfig.Transform.Translate(Vector3.forward * AirPlaneStats.currentSpeed * Time.deltaTime);
+            AirPlaneConfig.Transform.Translate(Vector3.forward * (AirPlaneStats.currentSpeed * Time.deltaTime));
             
         }
 

@@ -69,7 +69,7 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
         {
             foreach (Transform transform in rotate)
             {
-                transform.Rotate(Vector3.forward * -speed * Time.deltaTime);
+                transform.Rotate(Vector3.forward * (-speed * Time.deltaTime));
             }
         }
 
