@@ -20,7 +20,6 @@ namespace CarController
         [SerializeField] private CarStats carStats;
         
         [Header("Car Components")]
-        // TODO: Components
         
         private FsmMachine<CarStateType, CarState> _fsmCarMachine;
         
