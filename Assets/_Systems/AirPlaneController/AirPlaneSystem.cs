@@ -1,4 +1,4 @@
-﻿namespace AirPlaneController.StateMachine
+﻿namespace AirPlaneController
 {
     public abstract class AirPlaneSystem
     {

@@ -30,27 +30,56 @@ namespace CarController.CarInfo
                                         // In the points x = 0 and z = 0 of your car. You can select the value that you want in the y-axis,
                                         // however, you must notice that the higher this value is, the more unstable the car becomes.
                                         // Usually the y value goes from 0 to 1.5.
-
-                                        
-        // Components
-        
-        private Rigidbody _rigidbody; // Stores the car's rigidbody.
         
         
+        [Space(20)]
+        [Header("WHEELS")]
+        [Space(10)]
         /*
-        The following variables are used to store information about sideways friction of the wheels (such as
-        extremumSlip, extremumValue, asymptoteSlip, asymptoteValue and stiffness).We change these values to
-        make the car start drifting.
+        The following variables are store the wheel's data of the car.We need both the mesh-only game objects and wheel
+        collider components of the wheels.The wheel collider components and 3D meshes of the wheels cannot come from the same
+        game object; they must be separate game objects.
         */
-        private WheelFrictionCurve _flWheelFriction;
-        private float _flWExtremumSlip;
-        private WheelFrictionCurve _fRWheelFriction;
-        private float _frWExtremumSlip;
-        private WheelFrictionCurve _rLWheelFriction;
-        private float _rlWExtremumSlip;
-        private WheelFrictionCurve _rRWheelFriction;
-        private float _rrWExtremumSlip;
+        public GameObject frontLeftMesh;
+        public WheelCollider frontLeftCollider;
+        [Space(10)]
+        public GameObject frontRightMesh;
+        public WheelCollider frontRightCollider;
+        [Space(10)]
+        public GameObject rearLeftMesh;
+        public WheelCollider rearLeftCollider;
+        [Space(10)]
+        public GameObject rearRightMesh;
+        public WheelCollider rearRightCollider;
         
+        
+        [Space(20)]
+        [Header("EFFECTS")]
+        [Space(10)]
+        //The following variable lets you set up particle systems in your car
+        public bool useEffects;
+
+        // The following particle systems are used as tire smoke when the car drifts.
+        public ParticleSystem rlWheelParticleSystem;
+        public ParticleSystem rrWheelParticleSystem;
+
+        [Space(10)]
+        // The following trail renderers are used as tire skids when the car loses traction.
+        public TrailRenderer rlWheelTireSkid;
+        public TrailRenderer rrWheelTireSkid;
+        
+        
+        [Space(20)]
+        [Header("Sounds")]
+        [Space(10)]
+        
+        //The following variable lets you set up sounds for your car such as the car engine or tire screech sounds.
+        public AudioSource carEngineSound; // This variable stores the sound of the car engine.
+        public AudioSource tireScreechSound; // This variable stores the sound of the tire screech
+                                             // when the car is drifting.
+        
+        // Components
+        private Rigidbody _rigidbody; // Stores the car's rigidbody.
         
     }
 }
