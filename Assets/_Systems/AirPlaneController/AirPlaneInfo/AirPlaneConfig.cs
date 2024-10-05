@@ -44,7 +44,7 @@ namespace AirPlaneController.AirPlaneInfo
         [SerializeField] private float accelerating = 10f;
         [Range(0.1f, 50f)]
         [SerializeField] private float deAccelerating = 5f;
-
+        
         
         [Space(20)]
         [Header("Turbo settings")]
