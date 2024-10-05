@@ -20,10 +20,10 @@ namespace AirPlaneController
     
     public class AirPlaneController : MonoBehaviour
     {
-        private IAirPlaneInput _input;
         [Header("AirPlane Config")]
         [SerializeField] private AirPlaneConfig airPlaneConfig;
         [SerializeField] private AirPlaneStats airPlaneStats;
+        
         [Space(20)]
         [Header("AirPlane Components")]
         [SerializeField] private List<AirPlaneCollider> airPlaneColliders;
@@ -35,6 +35,7 @@ namespace AirPlaneController
         private FsmMachine<AirPlaneStateType, AirPlaneState> _stateMachineSystem;
         private Rigidbody _rigidbody;
         private Transform _transform;
+        private IAirPlaneInput _input;
 
         private void Awake()
         {
