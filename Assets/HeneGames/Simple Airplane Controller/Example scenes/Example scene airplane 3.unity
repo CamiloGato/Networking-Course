@@ -205,7 +205,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   airPlaneConfig: {fileID: 11400000, guid: edbe30bdbcbc1854cbd0a202b54c85ba, type: 2}
-  airPlaneColliders: []
   airPlaneStats:
     maxSpeed: 0
     currentYawSpeed: 0
@@ -217,6 +216,7 @@ MonoBehaviour:
     currentEngineSoundPitch: 0
     turboHeat: 0
     turboOverheat: 0
+  airPlaneColliders: []
   engineSoundSource: {fileID: 339245012}
   trailRenderer:
   - {fileID: 999183407}
@@ -795,63 +795,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!1001 &1196231004
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 6141148126551206849, guid: b3153dc28bdb00f40aec34c24f96c7ec, type: 3}
-      propertyPath: m_Name
-      value: Airplane
-      objectReference: {fileID: 0}
-    - target: {fileID: 6805621848954614139, guid: b3153dc28bdb00f40aec34c24f96c7ec, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 27.82412
-      objectReference: {fileID: 0}
-    - target: {fileID: 6805621848954614139, guid: b3153dc28bdb00f40aec34c24f96c7ec, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 55.57951
-      objectReference: {fileID: 0}
-    - target: {fileID: 6805621848954614139, guid: b3153dc28bdb00f40aec34c24f96c7ec, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -12.040751
-      objectReference: {fileID: 0}
-    - target: {fileID: 6805621848954614139, guid: b3153dc28bdb00f40aec34c24f96c7ec, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9941784
-      objectReference: {fileID: 0}
-    - target: {fileID: 6805621848954614139, guid: b3153dc28bdb00f40aec34c24f96c7ec, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.03611458
-      objectReference: {fileID: 0}
-    - target: {fileID: 6805621848954614139, guid: b3153dc28bdb00f40aec34c24f96c7ec, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.10144716
-      objectReference: {fileID: 0}
-    - target: {fileID: 6805621848954614139, guid: b3153dc28bdb00f40aec34c24f96c7ec, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.003681658
-      objectReference: {fileID: 0}
-    - target: {fileID: 6805621848954614139, guid: b3153dc28bdb00f40aec34c24f96c7ec, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6805621848954614139, guid: b3153dc28bdb00f40aec34c24f96c7ec, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6805621848954614139, guid: b3153dc28bdb00f40aec34c24f96c7ec, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b3153dc28bdb00f40aec34c24f96c7ec, type: 3}
 --- !u!1 &1206868647
 GameObject:
   m_ObjectHideFlags: 0
@@ -1049,7 +992,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 1110502193}
   - {fileID: 29073668}
-  - {fileID: 1196231004}
   - {fileID: 284372406}
   - {fileID: 2052681688}
   - {fileID: 363906084}
