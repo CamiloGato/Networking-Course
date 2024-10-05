@@ -51,11 +51,13 @@ namespace AirPlaneController.StateMachine.AirPlaneMovement
             AirPlaneStats.lastEngineSpeed = AirPlaneStats.currentSpeed;
 
             //Rotate airplane by inputs
+            float horizontal = _airPlaneInput.Horizontal();
+            float vertical = _airPlaneInput.Vertical();
             AirPlaneConfig.Transform.Rotate(
-                Vector3.forward * (-_airPlaneInput.Horizontal() * AirPlaneStats.currentRollSpeed * Time.deltaTime)
+                Vector3.forward * (-horizontal * AirPlaneStats.currentRollSpeed * Time.deltaTime)
                 );
             AirPlaneConfig.Transform.Rotate(
-                Vector3.right * (_airPlaneInput.Vertical() * AirPlaneStats.currentPitchSpeed * Time.deltaTime)
+                Vector3.right * (vertical * AirPlaneStats.currentPitchSpeed * Time.deltaTime)
                 );
 
             //Rotate yaw
