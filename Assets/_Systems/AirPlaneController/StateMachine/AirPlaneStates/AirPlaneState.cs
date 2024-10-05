@@ -1,9 +1,11 @@
-﻿namespace AirPlaneController.StateMachine.AirPlaneStates
+﻿using FiniteStateMachine;
+
+namespace AirPlaneController.StateMachine.AirPlaneStates
 {
-    public abstract class AirPlaneState
+    public abstract class AirPlaneState : IFsmState
     {
-        public abstract void EnterState();
-        public abstract void ExitState();
-        public abstract void UpdateState();
+        public abstract void Enter();
+        public abstract void Execute();
+        public abstract void Exit();
     }
 }

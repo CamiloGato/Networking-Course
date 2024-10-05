@@ -1,14 +1,23 @@
 ﻿using System.Collections.Generic;
 using AirPlaneController.AirPlaneInfo;
 using AirPlaneController.AirPlaneInput;
-using AirPlaneController.StateMachine;
 using AirPlaneController.StateMachine.AirPlaneAudio;
 using AirPlaneController.StateMachine.AirPlaneMovement;
 using AirPlaneController.StateMachine.AirPlaneStates;
+using FiniteStateMachine;
 using UnityEngine;
 
 namespace AirPlaneController
 {
+    
+    public enum AirPlaneStateType
+    {
+        Dead,
+        Flying,
+        Landing,
+        TakeOff
+    }
+    
     public class AirPlaneController : MonoBehaviour
     {
         private IAirPlaneInput _input;
@@ -23,7 +32,7 @@ namespace AirPlaneController
         [SerializeField] private Light[] turbineLights;
         [SerializeField] private Transform[] propellers;
         
-        private AirPlaneStateMachineSystem _stateMachineSystem;
+        private FsmMachine<AirPlaneStateType, AirPlaneState> _stateMachineSystem;
         private Rigidbody _rigidbody;
         private Transform _transform;
 
@@ -44,7 +53,7 @@ namespace AirPlaneController
             
             _input = new AirPlaneKeyboardInput();
 
-            _stateMachineSystem = new AirPlaneStateMachineSystem(AirPlaneStateType.Flying);
+            _stateMachineSystem = new FsmMachine<AirPlaneStateType, AirPlaneState>(AirPlaneStateType.Flying);
             
             AirPlaneSystem audioTakeOff = new AirPlaneAudioTakeOff(airPlaneConfig, airPlaneStats);
             AirPlaneSystem movementTakeOff = new AirPlaneMovementTakeOff(airPlaneConfig, airPlaneStats);
@@ -78,12 +87,12 @@ namespace AirPlaneController
 
         private void Start()
         {
-            _stateMachineSystem.StartStateMachine();
+            _stateMachineSystem.StartFsm();
         }
 
         private void Update()
         {
-            _stateMachineSystem.UpdateState();
+            _stateMachineSystem.ExecuteFsm();
         }
     }
 }

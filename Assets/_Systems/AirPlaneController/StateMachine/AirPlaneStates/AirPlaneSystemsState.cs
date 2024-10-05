@@ -11,7 +11,7 @@ namespace AirPlaneController.StateMachine.AirPlaneStates
             _systems = systems;
         }
 
-        public override void EnterState()
+        public override void Enter()
         {
             foreach (AirPlaneSystem airPlaneSystem in _systems)
             {
@@ -19,7 +19,7 @@ namespace AirPlaneController.StateMachine.AirPlaneStates
             }
         }
 
-        public override void ExitState()
+        public override void Exit()
         {
             foreach (AirPlaneSystem airPlaneSystem in _systems)
             {
@@ -27,7 +27,7 @@ namespace AirPlaneController.StateMachine.AirPlaneStates
             }
         }
 
-        public override void UpdateState()
+        public override void Execute()
         {
             foreach (AirPlaneSystem airPlaneSystem in _systems)
             {
