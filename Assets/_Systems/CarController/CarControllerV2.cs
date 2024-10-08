@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace CarController
 {
@@ -35,24 +36,6 @@ namespace CarController
         [SerializeField] private Vector3 bodyCenterOfMass;
 
         [Space(20)]
-        [Header("Wheels SetUp")]
-        [SerializeField] private GameObject frontLeftWheel;
-        [SerializeField] private GameObject frontRightWheel;
-        [SerializeField] private GameObject rearLeftWheel;
-        [SerializeField] private GameObject rearRightWheel;
-
-        [Space(10)]
-        [SerializeField] private WheelCollider frontLeftWheelCollider;
-        [SerializeField] private WheelCollider frontRightWheelCollider;
-        [SerializeField] private WheelCollider rearLeftWheelCollider;
-        [SerializeField] private WheelCollider rearRightWheelCollider;
-
-        private WheelFrictionCurve _frontLeftWheelFrictionCurve;
-        private WheelFrictionCurve _frontRightWheelFrictionCurve;
-        private WheelFrictionCurve _rearLeftWheelFrictionCurve;
-        private WheelFrictionCurve _rearRightWheelFrictionCurve;
-
-        [Space(20)]
         [Header("Effects SetUp")]
         [SerializeField] private ParticleSystem rareLeftWheelSmoke;
         [SerializeField] private ParticleSystem rareRightWheelSmoke;
@@ -66,8 +49,6 @@ namespace CarController
         [SerializeField] private AudioSource engineSound;
         [SerializeField] private AudioSource tireScreechSound;
         private float _initialCarEngineSoundPitch;
-
-
 
     }
 }

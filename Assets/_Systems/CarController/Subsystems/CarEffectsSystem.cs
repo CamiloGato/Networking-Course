@@ -3,14 +3,14 @@
 namespace CarController.Subsystems
 {
     [Serializable]
-    public class CarEffectsSystem : CarSystem
+    public class CarEffectsSystem : ICarSystem
     {
-        public override void StartSystem()
+        public void StartSystem()
         {
 
         }
 
-        public override void HandleSystem()
+        public void HandleSystem()
         {
 
         }

@@ -1,11 +1,8 @@
-﻿using System;
-
-namespace CarController.Subsystems
+﻿namespace CarController.Subsystems
 {
-    [Serializable]
-    public abstract class CarSystem
+    public interface ICarSystem
     {
-        public abstract void StartSystem();
-        public abstract void HandleSystem();
+        void StartSystem();
+        void HandleSystem();
     }
 }
