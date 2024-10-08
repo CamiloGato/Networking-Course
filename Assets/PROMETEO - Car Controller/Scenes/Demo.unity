@@ -5103,7 +5103,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 627556911, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
       propertyPath: decelerationMultiplier
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 261786959625234688, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
       propertyPath: m_RootOrder
@@ -5236,12 +5236,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 120
   maxReverseSpeed: 45
-  accelerationMultiplier: 2
+  accelerationMultiplier: 5
   maxSteeringAngle: 35
   steeringSpeed: 0.5
   brakeForce: 523
   decelerationMultiplier: 2
-  handbrakeDriftMultiplier: 2
+  handbrakeDriftMultiplier: 5
   bodyMassCenter: {x: 0, y: 0, z: 0}
   frontLeftMesh: {fileID: 75254676}
   frontLeftCollider: {fileID: 1257521201}
