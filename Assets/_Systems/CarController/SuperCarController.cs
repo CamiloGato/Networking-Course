@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace CarController
 {
-  public class SuperCarControllerV2 : MonoBehaviour
+  public class SuperCarController : MonoBehaviour
   {
     [Space(20)]
     [Header("CAR SETUP")]
@@ -14,7 +14,7 @@ namespace CarController
     public int maxReverseSpeed; //The maximum speed that the car can reach while going on reverse in km/h.
     [Range(1, 10)]
     public int accelerationMultiplier; // How fast the car can speed up.
-    // 1 is a slow acceleration and 10 is the fastest.
+                                       // 1 is a slow acceleration and 10 is the fastest.
     [Space(10)]
     [Range(10, 45)]
     public int maxSteeringAngle; // The maximum angle that the tires can reach while rotating the steering wheel.
@@ -29,20 +29,20 @@ namespace CarController
     public int handbrakeDriftMultiplier; // How much grip the car loses when the user hit the handbrake.
     [Space(10)]
     public Vector3 bodyMassCenter; // This is a vector that contains the center of mass the car.
-    // I recommend setting this value in the points x = 0 and z = 0 of your car.
-    // You can select the value that you want in the y-axis, however,
-    // you must notice that the higher this value is,
-    // the more unstable the car becomes.
-    // Usually the y value goes from 0 to 1.5.
+                                   // I recommend setting this value in the points x = 0 and z = 0 of your car.
+                                   // You can select the value that you want in the y-axis, however,
+                                   // you must notice that the higher this value is,
+                                   // the more unstable the car becomes.
+                                   // Usually the y value goes from 0 to 1.5.
 
     [Space(20)]
     [Header("WHEELS")]
     /*
-      The following variables are used to store the wheels' data of the car.
-      We need both the mesh-only game objects and wheel collider components of the wheels.
-      The wheel collider components and 3D meshes of the wheels cannot come from the same
-      game object; they must be separate game objects.
-      */
+    The following variables are used to store the wheels' data of the car.
+    We need both the mesh-only game objects and wheel collider components of the wheels.
+    The wheel collider components and 3D meshes of the wheels cannot come from the same
+    game object; they must be separate game objects.
+    */
     public GameObject frontLeftMesh;
     public WheelCollider frontLeftCollider;
     public GameObject frontRightMesh;
@@ -87,9 +87,9 @@ namespace CarController
     public bool isTractionLocked; // Used to know whether the traction of the car is locked or not.
 
     /*
-      IMPORTANT: The following variables should not be modified manually
-      since their values are automatically given via a script.
-      */
+    IMPORTANT: The following variables should not be modified manually
+    since their values are automatically given via a script.
+    */
     private Rigidbody _carRigidbody; // Stores the car's rigidbody.
     private float _steeringAxis; // Used to know whether the steering wheel has reached the maximum value.
     // It goes from -1 to 1.
@@ -99,12 +99,12 @@ namespace CarController
     private float _localVelocityZ;
     private float _localVelocityX;
     private bool _deceleratingCar;
-    private bool _touchControlsSetup;
+
     /*
-      The following variables are used to store information about sideways friction of the wheels (such as
-      extremum slip,extremumValue, asymptoteSlip, asymptoteValue and stiffness).
-      We change these values to make the car start drifting.
-      */
+    The following variables are used to store information about sideways friction of the wheels (such as
+    extremum slip,extremumValue, asymptoteSlip, asymptoteValue and stiffness).
+    We change these values to make the car start drifting.
+    */
     private WheelFrictionCurve _fLWheelFrictionCurve;
     private float _flWheelExtremumSlip;
     private WheelFrictionCurve _fRWheelFrictionCurve;
@@ -207,47 +207,14 @@ namespace CarController
         ResetSteeringAngle();
       }
 
-      // We call the method AnimateWheelMeshes() in order to match the wheel
-      // collider movements with the 3D meshes of the wheels.
       AnimateWheelMeshes();
 
     }
 
-    // This method converts the car speed data from float to string, and then set the text of the
-    // UI carSpeedText with this value.
-    public void CarSpeedUI()
+    #region Steering Methods
+
+    private void TurnLeft()
     {
-      float absoluteCarSpeed = Mathf.Abs(carSpeed);
-      carSpeedText.text = Mathf.RoundToInt(absoluteCarSpeed).ToString();
-    }
-
-    // This method controls the car sounds.
-    // For example, the car engine will sound slow when the car speed is low because the pitch of the sound
-    // will be at its lowest point.
-    // On the other hand, it will sound fast when the car speed is high because
-    // the pitch of the sound will be the sum of the initial pitch + the car speed divided by 100f.
-    // Apart from that, the tireScreechSound will play whenever the car starts drifting or losing traction.
-    public void CarSounds()
-    {
-      float engineSoundPitch = _initialCarEngineSoundPitch + Mathf.Abs(_carRigidbody.linearVelocity.magnitude) / 25f;
-      carEngineSound.pitch = engineSoundPitch;
-
-      if(isDrifting || (isTractionLocked && Mathf.Abs(carSpeed) > 12f)){
-        if(!tireScreechSound.isPlaying){
-          tireScreechSound.Play();
-        }
-      }else if(!isDrifting && (!isTractionLocked || Mathf.Abs(carSpeed) < 12f)){
-        tireScreechSound.Stop();
-      }
-    }
-
-    //
-    //STEERING METHODS
-    //
-
-    // The following method turns the front car wheels to the left.
-    // The speed of this movement will depend on the steeringSpeed variable.
-    private void TurnLeft(){
       _steeringAxis -= Time.deltaTime * 10f * steeringSpeed;
       if(_steeringAxis < -1f){
         _steeringAxis = -1f;
@@ -257,9 +224,8 @@ namespace CarController
       frontRightCollider.steerAngle = Mathf.Lerp(frontRightCollider.steerAngle, steeringAngle, steeringSpeed);
     }
 
-    // The following method turns the front car wheels to the right.
-    // The speed of this movement will depend on the steeringSpeed variable.
-    private void TurnRight(){
+    private void TurnRight()
+    {
       _steeringAxis += (Time.deltaTime * 10f * steeringSpeed);
       if(_steeringAxis > 1f){
         _steeringAxis = 1f;
@@ -269,9 +235,8 @@ namespace CarController
       frontRightCollider.steerAngle = Mathf.Lerp(frontRightCollider.steerAngle, steeringAngle, steeringSpeed);
     }
 
-    // The following method takes the front car wheels to their default position (rotation = 0).
-    // The speed of this movement will depend on the steeringSpeed variable.
-    private void ResetSteeringAngle(){
+    private void ResetSteeringAngle()
+    {
       if(_steeringAxis < 0f){
         _steeringAxis += (Time.deltaTime * 10f * steeringSpeed);
       }else if(_steeringAxis > 0f){
@@ -285,31 +250,12 @@ namespace CarController
       frontRightCollider.steerAngle = Mathf.Lerp(frontRightCollider.steerAngle, steeringAngle, steeringSpeed);
     }
 
-    // This method matches both the position and rotation of the WheelColliders with the WheelMeshes.
-    private void AnimateWheelMeshes(){
-      frontLeftCollider.GetWorldPose(out Vector3 flwPosition, out Quaternion flwRotation);
-      frontLeftMesh.transform.position = flwPosition;
-      frontLeftMesh.transform.rotation = flwRotation;
+    #endregion
 
-      frontRightCollider.GetWorldPose(out Vector3 frwPosition, out Quaternion frwRotation);
-      frontRightMesh.transform.position = frwPosition;
-      frontRightMesh.transform.rotation = frwRotation;
+    #region Engine And Braking Methods
 
-      rearLeftCollider.GetWorldPose(out Vector3 rlwPosition, out Quaternion rlwRotation);
-      rearLeftMesh.transform.position = rlwPosition;
-      rearLeftMesh.transform.rotation = rlwRotation;
-
-      rearRightCollider.GetWorldPose(out Vector3 rrwPosition, out Quaternion rrwRotation);
-      rearRightMesh.transform.position = rrwPosition;
-      rearRightMesh.transform.rotation = rrwRotation;
-    }
-
-    //
-    //ENGINE AND BRAKING METHODS
-    //
-
-    // This method applies positive torque to the wheels to go forward.
-    private void GoForward(){
+    private void GoForward()
+    {
       // If the forces applied to the rigidbody in the 'x' asis are greater than
       // 3f, it means that the car is losing traction, then the car will start emitting particle systems.
       isDrifting = Mathf.Abs(_localVelocityX) > 2.5f;
@@ -348,8 +294,8 @@ namespace CarController
       }
     }
 
-    // This method applies negative torque to the wheels to go backwards.
-    private void GoReverse(){
+    private void GoReverse()
+    {
       // If the forces applied to the rigidbody in the 'x' asis are greater than
       // 3f, it means that the car is losing traction, then the car will start emitting particle systems.
       isDrifting = Mathf.Abs(_localVelocityX) > 2.5f;
@@ -388,19 +334,16 @@ namespace CarController
       }
     }
 
-    //The following function set the motor torque to 0 (in case the user is not pressing either W or S).
-    private void ThrottleOff(){
+    private void ThrottleOff()
+    {
       frontLeftCollider.motorTorque = 0;
       frontRightCollider.motorTorque = 0;
       rearLeftCollider.motorTorque = 0;
       rearRightCollider.motorTorque = 0;
     }
 
-    // The following method decelerates the speed of the car according to the decelerationMultiplier variable, where
-    // 1 is the slowest and 10 is the fastest deceleration.
-    // This method is called by the function InvokeRepeating, usually every 0.1f when the user
-    // is not pressing W (throttle), S (reverse) or Space bar (handbrake).
-    public void DecelerateCar(){
+    public void DecelerateCar()
+    {
       // If the forces applied to the rigidbody in the 'x' asis are greater than
       // 3f, it means that the car is losing traction, then the car will start emitting particle systems.
       isDrifting = Mathf.Abs(_localVelocityX) > 2.5f;
@@ -431,19 +374,62 @@ namespace CarController
       }
     }
 
-    // This function applies brake torque to the wheels according to the brake force given by the user.
-    private void Brakes(){
+    public void RecoverTraction()
+    {
+      isTractionLocked = false;
+      _driftingAxis -= Time.deltaTime / 1.5f;
+      if(_driftingAxis < 0f){
+        _driftingAxis = 0f;
+      }
+
+      //If the 'driftingAxis' value is not 0f, it means that the wheels have not recovered their traction.
+      //We are going to continue decreasing the sideways friction of the wheels until we reach the initial
+      // car's grip.
+      if(_fLWheelFrictionCurve.extremumSlip > _flWheelExtremumSlip){
+        _fLWheelFrictionCurve.extremumSlip = _flWheelExtremumSlip * handbrakeDriftMultiplier * _driftingAxis;
+        frontLeftCollider.sidewaysFriction = _fLWheelFrictionCurve;
+
+        _fRWheelFrictionCurve.extremumSlip = _frWheelExtremumSlip * handbrakeDriftMultiplier * _driftingAxis;
+        frontRightCollider.sidewaysFriction = _fRWheelFrictionCurve;
+
+        _rLWheelFrictionCurve.extremumSlip = _rlWheelExtremumSlip * handbrakeDriftMultiplier * _driftingAxis;
+        rearLeftCollider.sidewaysFriction = _rLWheelFrictionCurve;
+
+        _rRWheelFrictionCurve.extremumSlip = _rrWheelExtremumSlip * handbrakeDriftMultiplier * _driftingAxis;
+        rearRightCollider.sidewaysFriction = _rRWheelFrictionCurve;
+
+        Invoke(nameof(RecoverTraction), Time.deltaTime);
+
+      } else if (_fLWheelFrictionCurve.extremumSlip < _flWheelExtremumSlip){
+        _fLWheelFrictionCurve.extremumSlip = _flWheelExtremumSlip;
+        frontLeftCollider.sidewaysFriction = _fLWheelFrictionCurve;
+
+        _fRWheelFrictionCurve.extremumSlip = _frWheelExtremumSlip;
+        frontRightCollider.sidewaysFriction = _fRWheelFrictionCurve;
+
+        _rLWheelFrictionCurve.extremumSlip = _rlWheelExtremumSlip;
+        rearLeftCollider.sidewaysFriction = _rLWheelFrictionCurve;
+
+        _rRWheelFrictionCurve.extremumSlip = _rrWheelExtremumSlip;
+        rearRightCollider.sidewaysFriction = _rRWheelFrictionCurve;
+
+        _driftingAxis = 0f;
+      }
+    }
+
+    #endregion
+
+    #region Breaks Methods
+
+
+    private void Brakes()
+    {
       frontLeftCollider.brakeTorque = brakeForce;
       frontRightCollider.brakeTorque = brakeForce;
       rearLeftCollider.brakeTorque = brakeForce;
       rearRightCollider.brakeTorque = brakeForce;
     }
 
-    // This function is used to make the car lose traction.
-    // By using this, the car will start drifting.
-    // The amount of traction lost will depend on the handbrakeDriftMultiplier variable.
-    // If this value is small, then the car will not drift too much, but if it is high,
-    // then you could make the car feel like going on ice.
     private void Handbrake()
     {
       //If the forces applied to the rigidbody in the 'x' axis are greater than
@@ -492,9 +478,48 @@ namespace CarController
       isTractionLocked = true;
     }
 
-    // This function is used to emit both the particle systems of the tires'
-    // smoke and the trail renderers of the tire skids depending on the value of the bool variables 'isDrifting'
-    // and 'isTractionLocked'.
+    #endregion
+
+    #region Private Methods & Helpers
+
+    private WheelFrictionCurve CreateFrictionCurve(WheelCollider wheelCollider)
+    {
+      WheelFrictionCurve frictionCurve = new WheelFrictionCurve()
+      {
+        extremumSlip = wheelCollider.sidewaysFriction.extremumSlip,
+        extremumValue = wheelCollider.sidewaysFriction.extremumValue,
+        asymptoteSlip = wheelCollider.sidewaysFriction.asymptoteSlip,
+        asymptoteValue = wheelCollider.sidewaysFriction.asymptoteValue,
+        stiffness = wheelCollider.sidewaysFriction.stiffness
+      };
+
+      return frictionCurve;
+    }
+
+    #endregion
+
+    #region Systems
+
+    public void CarSpeedUI()
+    {
+      float absoluteCarSpeed = Mathf.Abs(carSpeed);
+      carSpeedText.text = Mathf.RoundToInt(absoluteCarSpeed).ToString();
+    }
+
+    public void CarSounds()
+    {
+      float engineSoundPitch = _initialCarEngineSoundPitch + Mathf.Abs(_carRigidbody.linearVelocity.magnitude) / 25f;
+      carEngineSound.pitch = engineSoundPitch;
+
+      if(isDrifting || (isTractionLocked && Mathf.Abs(carSpeed) > 12f)){
+        if(!tireScreechSound.isPlaying){
+          tireScreechSound.Play();
+        }
+      }else if(!isDrifting && (!isTractionLocked || Mathf.Abs(carSpeed) < 12f)){
+        tireScreechSound.Stop();
+      }
+    }
+
     private void DriftCarPS()
     {
       switch (isDrifting)
@@ -518,66 +543,26 @@ namespace CarController
       }
     }
 
-    // This function is used to recover the traction of the car when the user has stopped using the car's handbrake.
-    public void RecoverTraction()
+    private void AnimateWheelMeshes()
     {
-      isTractionLocked = false;
-      _driftingAxis -= Time.deltaTime / 1.5f;
-      if(_driftingAxis < 0f){
-        _driftingAxis = 0f;
-      }
+      frontLeftCollider.GetWorldPose(out Vector3 flwPosition, out Quaternion flwRotation);
+      frontLeftMesh.transform.position = flwPosition;
+      frontLeftMesh.transform.rotation = flwRotation;
 
-      //If the 'driftingAxis' value is not 0f, it means that the wheels have not recovered their traction.
-      //We are going to continue decreasing the sideways friction of the wheels until we reach the initial
-      // car's grip.
-      if(_fLWheelFrictionCurve.extremumSlip > _flWheelExtremumSlip){
-        _fLWheelFrictionCurve.extremumSlip = _flWheelExtremumSlip * handbrakeDriftMultiplier * _driftingAxis;
-        frontLeftCollider.sidewaysFriction = _fLWheelFrictionCurve;
+      frontRightCollider.GetWorldPose(out Vector3 frwPosition, out Quaternion frwRotation);
+      frontRightMesh.transform.position = frwPosition;
+      frontRightMesh.transform.rotation = frwRotation;
 
-        _fRWheelFrictionCurve.extremumSlip = _frWheelExtremumSlip * handbrakeDriftMultiplier * _driftingAxis;
-        frontRightCollider.sidewaysFriction = _fRWheelFrictionCurve;
+      rearLeftCollider.GetWorldPose(out Vector3 rlwPosition, out Quaternion rlwRotation);
+      rearLeftMesh.transform.position = rlwPosition;
+      rearLeftMesh.transform.rotation = rlwRotation;
 
-        _rLWheelFrictionCurve.extremumSlip = _rlWheelExtremumSlip * handbrakeDriftMultiplier * _driftingAxis;
-        rearLeftCollider.sidewaysFriction = _rLWheelFrictionCurve;
-
-        _rRWheelFrictionCurve.extremumSlip = _rrWheelExtremumSlip * handbrakeDriftMultiplier * _driftingAxis;
-        rearRightCollider.sidewaysFriction = _rRWheelFrictionCurve;
-
-        Invoke(nameof(RecoverTraction), Time.deltaTime);
-
-      } else if (_fLWheelFrictionCurve.extremumSlip < _flWheelExtremumSlip){
-        _fLWheelFrictionCurve.extremumSlip = _flWheelExtremumSlip;
-        frontLeftCollider.sidewaysFriction = _fLWheelFrictionCurve;
-
-        _fRWheelFrictionCurve.extremumSlip = _frWheelExtremumSlip;
-        frontRightCollider.sidewaysFriction = _fRWheelFrictionCurve;
-
-        _rLWheelFrictionCurve.extremumSlip = _rlWheelExtremumSlip;
-        rearLeftCollider.sidewaysFriction = _rLWheelFrictionCurve;
-
-        _rRWheelFrictionCurve.extremumSlip = _rrWheelExtremumSlip;
-        rearRightCollider.sidewaysFriction = _rRWheelFrictionCurve;
-
-        _driftingAxis = 0f;
-      }
+      rearRightCollider.GetWorldPose(out Vector3 rrwPosition, out Quaternion rrwRotation);
+      rearRightMesh.transform.position = rrwPosition;
+      rearRightMesh.transform.rotation = rrwRotation;
     }
 
-    #region Private Methods & Helpers
-    private WheelFrictionCurve CreateFrictionCurve(WheelCollider wheelCollider)
-    {
-      WheelFrictionCurve frictionCurve = new WheelFrictionCurve()
-      {
-        extremumSlip = wheelCollider.sidewaysFriction.extremumSlip,
-        extremumValue = wheelCollider.sidewaysFriction.extremumValue,
-        asymptoteSlip = wheelCollider.sidewaysFriction.asymptoteSlip,
-        asymptoteValue = wheelCollider.sidewaysFriction.asymptoteValue,
-        stiffness = wheelCollider.sidewaysFriction.stiffness
-      };
-
-      return frictionCurve;
-    }
     #endregion
-
 
   }
 }

@@ -5022,7 +5022,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 627556911, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 627556911, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
       propertyPath: useSounds
@@ -5118,7 +5118,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 642287924342879162, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 543450653621877421}
+      addedObject: {fileID: 543450653621877419}
   m_SourcePrefab: {fileID: 100100000, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
 --- !u!4 &543450653150262629
 Transform:
@@ -5173,26 +5173,26 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 261786959625234688, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
   m_PrefabInstance: {fileID: 299688005468115882}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &543450653621877421
+--- !u!114 &543450653621877419
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 29782265}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bb599ba327d435d92d55fff300b8ac5, type: 3}
+  m_Script: {fileID: 11500000, guid: 71fdb347a762cb64db74493d12a97bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 120
   maxReverseSpeed: 45
-  accelerationMultiplier: 5
+  accelerationMultiplier: 2
   maxSteeringAngle: 35
-  steeringSpeed: 1
-  brakeForce: 350
+  steeringSpeed: 0.5
+  brakeForce: 523
   decelerationMultiplier: 2
-  handbrakeDriftMultiplier: 5
+  handbrakeDriftMultiplier: 2
   bodyMassCenter: {x: 0, y: 0, z: 0}
   frontLeftMesh: {fileID: 75254676}
   frontLeftCollider: {fileID: 1257521201}

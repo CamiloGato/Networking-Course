@@ -1,27 +1,19 @@
-﻿using CarController.CarInfo;
-using CarController.StateMachine.CarStates;
-using FiniteStateMachine;
+﻿using CarController.Subsystems;
 using UnityEngine;
 
 namespace CarController
 {
-    public enum CarStateType
-    {
-        Idle,
-        Accelerating,
-        Decelerating,
-        Braking,
-    }
-    
     public class CarController : MonoBehaviour
     {
-        [Header("Car Config")]
-        [SerializeField] private CarConfig carConfig;
-        [SerializeField] private CarStats carStats;
-        
-        [Header("Car Components")]
-        
-        private FsmMachine<CarStateType, CarState> _fsmCarMachine;
-        
+        private ICarSystem[] _systems;
+
+        private void Start()
+        {
+            foreach (ICarSystem carSystem in _systems)
+            {
+                carSystem.StartSystem();
+            }
+        }
+
     }
 }
