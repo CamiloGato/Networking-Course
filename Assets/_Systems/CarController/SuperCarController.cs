@@ -93,6 +93,8 @@ namespace CarController
             HandleDeceleration();
         }
 
+        #region Car Controls
+
         private void HandleThrottle()
         {
             if (Input.GetKey(KeyCode.W))
@@ -145,6 +147,8 @@ namespace CarController
                 _deceleratingCar = true;
             }
         }
+
+        #endregion
 
         #region Steering Methods
 
