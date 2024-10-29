@@ -16,9 +16,8 @@ namespace CarController
         [Range(1, 10)] public int handbrakeDriftMultiplier;
         [Space(10)] public Vector3 bodyMassCenter;
 
-        [Space(20)] [Header("WHEELS")]
+        [Space(20)] [Header("WHEELS")] [Space(10)]
         public WheelCollider frontLeftCollider, frontRightCollider, rearLeftCollider, rearRightCollider;
-
         public GameObject frontLeftMesh, frontRightMesh, rearLeftMesh, rearRightMesh;
 
         [Space(20)] [Header("EFFECTS")] [Space(10)]
