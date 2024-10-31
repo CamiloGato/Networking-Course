@@ -1,4 +1,5 @@
-﻿using Unity.Collections;
+﻿using Lectures._Shared.Scripts;
+using Unity.Collections;
 using Unity.Jobs;
 using Unity.Networking.Transport;
 using UnityEngine;
@@ -23,7 +24,7 @@ namespace Lectures.Lecture1.Scripts
                     case NetworkEvent.Type.Data:
                     {
                         uint number = stream.ReadUInt();
-                        Debug.Log("Got the number " + number);
+                        LoggerSystem.Log("Got the number " + number);
                         number += 2;
 
                         if (Connections[index].IsCreated)
@@ -36,7 +37,7 @@ namespace Lectures.Lecture1.Scripts
                     }
                     case NetworkEvent.Type.Disconnect:
                     {
-                        Debug.Log("Client disconnected from server");
+                        LoggerSystem.Log("Client disconnected from server");
                         Connections[index] = default;
                         break;
                     }
@@ -57,7 +58,7 @@ namespace Lectures.Lecture1.Scripts
             {
                 if (!Connections[i].IsCreated || Connections[i].GetState(Driver) == NetworkConnection.State.Disconnected)
                 {
-                    Debug.Log("Removing inactive or disconnected connection");
+                    LoggerSystem.Log("Removing inactive or disconnected connection");
                     Connections.RemoveAtSwapBack(i);
                 }
             }
@@ -67,7 +68,7 @@ namespace Lectures.Lecture1.Scripts
             while ((connection = Driver.Accept()) != default)
             {
                 Connections.Add(connection);
-                Debug.Log("Accepted a connection");
+                LoggerSystem.Log("Accepted a connection");
             }
         }
     }
@@ -77,9 +78,16 @@ namespace Lectures.Lecture1.Scripts
         private NetworkDriver _driver;
         private NativeList<NetworkConnection> _connections;
         private JobHandle _serverJobHandle;
+        private bool _isServerStarted;
 
-        private void Start()
+        public void StartServer()
         {
+            if (_isServerStarted)
+            {
+                LoggerSystem.Log("Server is already started");
+                return;
+            }
+
             _connections = new NativeList<NetworkConnection>(16, Allocator.Persistent);
             NetworkSettings settings = new NetworkSettings();
             settings.WithNetworkConfigParameters(maxConnectAttempts: 10, maxFrameTimeMS: 10);
@@ -88,11 +96,14 @@ namespace Lectures.Lecture1.Scripts
             NetworkEndpoint endpoint = NetworkEndpoint.AnyIpv4.WithPort(8080);
             if (_driver.Bind(endpoint) != 0)
             {
-                Debug.LogError("Failed to bind to port 8080");
+                LoggerSystem.Log("Failed to bind to port 8080");
                 return;
             }
 
             _driver.Listen();
+
+            _isServerStarted = true;
+            LoggerSystem.Log("Server started");
         }
 
         private void OnDestroy()
@@ -115,6 +126,8 @@ namespace Lectures.Lecture1.Scripts
 
         private void Update()
         {
+            if (!_isServerStarted) return;
+
             _serverJobHandle.Complete();
 
             ServerUpdateConnectionsJob connectionJob = new ServerUpdateConnectionsJob()

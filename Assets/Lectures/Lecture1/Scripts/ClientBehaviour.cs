@@ -1,4 +1,5 @@
-﻿using Unity.Collections;
+﻿using Lectures._Shared.Scripts;
+using Unity.Collections;
 using Unity.Jobs;
 using Unity.Networking.Transport;
 using UnityEngine;
@@ -13,14 +14,7 @@ namespace Lectures.Lecture1.Scripts
 
         public void Execute()
         {
-            if (!Connection[0].IsCreated)
-            {
-                if (Done[0] != 1)
-                {
-                    Debug.Log("Failed to connect to server");
-                }
-                return;
-            }
+            if (!CheckConnection()) return;
 
             NetworkEvent.Type cmd;
             while ((cmd = Connection[0].PopEvent(Driver, out DataStreamReader stream)) != NetworkEvent.Type.Empty)
@@ -29,35 +23,65 @@ namespace Lectures.Lecture1.Scripts
                 {
                     case NetworkEvent.Type.Connect:
                     {
-                        Debug.Log("Connected to server");
-
-                        uint value = 1;
-                        if (Connection[0].IsCreated && Connection[0].GetState(Driver) == NetworkConnection.State.Connected)
-                        {
-                            Driver.BeginSend(Connection[0], out DataStreamWriter writer);
-                            writer.WriteUInt(value);
-                            Driver.EndSend(writer);
-                        }
+                        ConnectServer();
                         break;
                     }
                     case NetworkEvent.Type.Data:
                     {
-                        uint value = stream.ReadUInt();
-                        Debug.Log("Got the value = " + value);
-                        Done[0] = 1;
-
-                        Connection[0].Disconnect(Driver);
-                        Connection[0] = default;
+                        ReadData(stream);
                         break;
                     }
                     case NetworkEvent.Type.Disconnect:
                     {
-                        Debug.Log("Disconnected from server");
-                        Connection[0] = default;
+                        DisconnectServer();
                         break;
                     }
                 }
             }
+        }
+
+        private void DisconnectServer()
+        {
+            LoggerSystem.Log("Disconnected from server");
+            Connection[0] = default;
+        }
+
+        private void ReadData(DataStreamReader stream)
+        {
+            uint value = stream.ReadUInt();
+            LoggerSystem.Log("Got the value = " + value);
+            Done[0] = 1;
+
+            Connection[0].Disconnect(Driver);
+            Connection[0] = default;
+        }
+
+        private void ConnectServer()
+        {
+            LoggerSystem.Log("Connected to server");
+
+            uint value = 1;
+            if (Connection[0].IsCreated && Connection[0].GetState(Driver) == NetworkConnection.State.Connected)
+            {
+                Driver.BeginSend(Connection[0], out DataStreamWriter writer);
+                writer.WriteUInt(value);
+                Driver.EndSend(writer);
+            }
+        }
+
+        private bool CheckConnection()
+        {
+            if (!Connection[0].IsCreated)
+            {
+                if (Done[0] != 1)
+                {
+                    LoggerSystem.Log("Failed to connect to server");
+                }
+
+                return false;
+            }
+
+            return true;
         }
     }
 
@@ -68,7 +92,9 @@ namespace Lectures.Lecture1.Scripts
         private NativeArray<byte> _done;
         private JobHandle _clientJobHandle;
 
-        private void Start()
+        private bool _isClientStarted;
+
+        public void StartClient()
         {
             _driver = NetworkDriver.Create();
             _connection = new NativeArray<NetworkConnection>(1, Allocator.Persistent);
@@ -76,6 +102,9 @@ namespace Lectures.Lecture1.Scripts
 
             NetworkEndpoint endpoint = NetworkEndpoint.LoopbackIpv4.WithPort(8080);
             _connection[0] = _driver.Connect(endpoint);
+
+            _isClientStarted = true;
+            LoggerSystem.Log("Client sent connection request");
         }
 
         private void OnDestroy()
@@ -103,6 +132,8 @@ namespace Lectures.Lecture1.Scripts
 
         private void Update()
         {
+            if (!_isClientStarted) return;
+
             _clientJobHandle.Complete();
 
             if (_done[0] == 1) return;
