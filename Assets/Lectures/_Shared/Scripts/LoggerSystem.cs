@@ -9,6 +9,14 @@ namespace Lectures._Shared.Scripts
         [SerializeField] private TMP_Text logText;
         [SerializeField] private RectTransform logContent;
 
+        #if UNITY_STANDALONE_WIN
+
+
+        Windows.ConsoleWindow console = new Windows.ConsoleWindow();
+        Windows.ConsoleInput input = new Windows.ConsoleInput();
+
+        #endif
+
         private static LoggerSystem _instance;
         private static readonly ConcurrentQueue<string> LOGMessages = new();
 
@@ -26,6 +34,7 @@ namespace Lectures._Shared.Scripts
         {
             if (LOGMessages.TryDequeue(out string message))
             {
+
                 Instantiate(logText, logContent).text = message;
             }
         }
