@@ -11,10 +11,6 @@ namespace Lectures._Shared.Scripts
 
         #if UNITY_STANDALONE_WIN
 
-
-        Windows.ConsoleWindow console = new Windows.ConsoleWindow();
-        Windows.ConsoleInput input = new Windows.ConsoleInput();
-
         #endif
 
         private static LoggerSystem _instance;
