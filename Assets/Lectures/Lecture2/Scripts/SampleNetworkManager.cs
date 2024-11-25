@@ -1,4 +1,5 @@
 ﻿using System;
+using Lectures._Shared.Scripts;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -29,6 +30,7 @@ namespace Lectures.Lecture2.Scripts
             if (isServer)
             {
                 StartServer();
+                LoggerSystem.Log("This Server is running on " + GetTransport());
             }
         }
 
@@ -110,7 +112,8 @@ namespace Lectures.Lecture2.Scripts
             }
             else if (_networkManager.IsClient)
             {
-                SampleNetworkPlayer player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<SampleNetworkPlayer>();
+                SampleNetworkPlayer player = _networkManager.SpawnManager.GetLocalPlayerObject()
+                    .GetComponent<SampleNetworkPlayer>();
                 player.Move();
             }
         }

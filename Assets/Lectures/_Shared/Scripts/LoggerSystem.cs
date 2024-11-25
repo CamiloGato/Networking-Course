@@ -1,6 +1,8 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using TMPro;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Lectures._Shared.Scripts
 {
@@ -8,10 +10,6 @@ namespace Lectures._Shared.Scripts
     {
         [SerializeField] private TMP_Text logText;
         [SerializeField] private RectTransform logContent;
-
-        #if UNITY_STANDALONE_WIN
-
-        #endif
 
         private static LoggerSystem _instance;
         private static readonly ConcurrentQueue<string> LOGMessages = new();
@@ -23,6 +21,7 @@ namespace Lectures._Shared.Scripts
                 Destroy(gameObject);
                 return;
             }
+
             _instance = this;
         }
 
@@ -30,8 +29,11 @@ namespace Lectures._Shared.Scripts
         {
             if (LOGMessages.TryDequeue(out string message))
             {
-
+#if UNITY_SERVER
+                Debugger.Log(0, "LoggerSystem", message);
+#else
                 Instantiate(logText, logContent).text = message;
+#endif
             }
         }
 
@@ -42,6 +44,7 @@ namespace Lectures._Shared.Scripts
                 Debug.LogError("LoggerSystem instance is not set");
                 return;
             }
+
             Debug.Log(message);
             LOGMessages.Enqueue(message);
         }
