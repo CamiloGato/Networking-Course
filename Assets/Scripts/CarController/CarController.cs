@@ -20,6 +20,23 @@ namespace CarController
 
         [Tooltip("Rigidbody center of mass.")] public Vector3 bodyMassCenter;
 
+        [Space(10)]
+        [Header("DRIFT TWEAKS")]
+        [Tooltip("Allow drifting when reversing? If false, reverse won't trigger drifting.")]
+        public bool allowReverseDrift;
+
+        [Tooltip("Sideways velocity threshold for forward drifting. Lower = easier drift.")]
+        public float driftSidewaysThresholdForward = 1.5f;
+
+        [Tooltip("Sideways velocity threshold for reverse drifting. Increase to make reverse drifting harder.")]
+        public float driftSidewaysThresholdReverse = 3f;
+
+        [Tooltip("Minimum forward speed (km/h approx) required to drift going forward.")]
+        public float driftMinForwardSpeed = 5f;
+
+        [Tooltip("Minimum reverse speed (km/h approx) required to drift going backward.")]
+        public float driftMinReverseSpeed = 5f;
+
         [Space(10)] [Header("WHEELS")] public GameObject frontLeftMesh;
         public WheelCollider frontLeftCollider;
         public GameObject frontRightMesh;
@@ -65,9 +82,11 @@ namespace CarController
         private void Update()
         {
             // Approximate speed based on front-left wheel's RPM and circumference.
+            // This is roughly in km/h.
             carSpeed = (2f * Mathf.PI * frontLeftCollider.radius * frontLeftCollider.rpm * 60f) / 1000f;
 
             // Local velocities (X and Z).
+            // localVelocityZ > 0 means moving forward, < 0 means reversing.
             localVelocityX = transform.InverseTransformDirection(_rb.linearVelocity).x;
             localVelocityZ = transform.InverseTransformDirection(_rb.linearVelocity).z;
 
@@ -165,17 +184,6 @@ namespace CarController
         }
 
         /// <summary>
-        /// Applies brake force to all four wheels.
-        /// </summary>
-        private void Brakes()
-        {
-            frontLeftCollider.brakeTorque = brakeForce;
-            frontRightCollider.brakeTorque = brakeForce;
-            rearLeftCollider.brakeTorque = brakeForce;
-            rearRightCollider.brakeTorque = brakeForce;
-        }
-
-        /// <summary>
         /// Handbrake (drift) action. It also applies braking torque to slow down.
         /// </summary>
         public void Handbrake()
@@ -264,7 +272,28 @@ namespace CarController
         /// </summary>
         private void CheckIfDrifting()
         {
-            isDrifting = (Mathf.Abs(localVelocityX) > 2.5f);
+            // Default: not drifting
+            isDrifting = false;
+
+            // If we are moving forward (or basically not negative localVelocityZ).
+            if (localVelocityZ >= 0f)
+            {
+                // Check if speed is above minimum to drift forward
+                isDrifting = Mathf.Abs(carSpeed) >= driftMinForwardSpeed &&
+                             Mathf.Abs(localVelocityX) > driftSidewaysThresholdForward;
+            }
+            else // localVelocityZ < 0 => reversing
+            {
+                if (!allowReverseDrift)
+                {
+                    // If we do not allow drifting in reverse, exit.
+                    return;
+                }
+
+                // If we do allow reverse drifting, check thresholds
+                isDrifting = Mathf.Abs(carSpeed) >= driftMinReverseSpeed &&
+                             Mathf.Abs(localVelocityX) > driftSidewaysThresholdReverse;
+            }
         }
 
         /// <summary>
@@ -328,6 +357,17 @@ namespace CarController
         }
 
         /// <summary>
+        /// Applies brake force to all four wheels.
+        /// </summary>
+        private void Brakes()
+        {
+            frontLeftCollider.brakeTorque = brakeForce;
+            frontRightCollider.brakeTorque = brakeForce;
+            rearLeftCollider.brakeTorque = brakeForce;
+            rearRightCollider.brakeTorque = brakeForce;
+        }
+
+        /// <summary>
         /// Sets the steering angle of the front wheels.
         /// </summary>
         private void SetSteeringAngle(float axis)
@@ -361,9 +401,13 @@ namespace CarController
         private void ApplyDriftFriction(float driftingAxis)
         {
             float newSlipFactor = driftingAxis * handbrakeDriftMultiplier;
-            // Clamping to avoid extremely low or high values.
-            if (newSlipFactor < 1f) newSlipFactor = 1f;
-            if (newSlipFactor > handbrakeDriftMultiplier) newSlipFactor = handbrakeDriftMultiplier;
+
+            // If you want an even more arcade feel, you could skip clamping or clamp higher.
+            if (newSlipFactor < 1f)
+                newSlipFactor = 1f;
+
+            if (newSlipFactor > handbrakeDriftMultiplier)
+                newSlipFactor = handbrakeDriftMultiplier;
 
             // Front-Left
             WheelFrictionCurve flFriction = _fLWheelFriction;
