@@ -6,7 +6,7 @@ namespace CarController
     public class CarAudio : MonoBehaviour
     {
         [SerializeField] private CarController car;
-        [SerializeField] private bool useSounds = false;
+        [SerializeField] private bool useSounds;
 
         [Header("Audio Sources")] public AudioSource carEngineSound;
         public AudioSource tireScreechSound;
@@ -31,15 +31,13 @@ namespace CarController
 
             if (carEngineSound != null)
             {
-                float newPitch = _initialCarEnginePitch +
-                                 (Mathf.Abs(car.GetComponent<Rigidbody>().linearVelocity.magnitude) / 25f);
+                float newPitch = _initialCarEnginePitch + Mathf.Abs(car.LinearVelocityMagnitude) / 25f;
                 carEngineSound.pitch = newPitch;
             }
 
-            // Control del chirrido de neumáticos
             if (tireScreechSound != null)
             {
-                if ((car.isDrifting) || (car.isTractionLocked && Mathf.Abs(car.carSpeed) > 12f))
+                if ((car.IsDrifting) || (car.IsTractionLocked && Mathf.Abs(car.CarSpeed) > 12f))
                 {
                     if (!tireScreechSound.isPlaying) tireScreechSound.Play();
                 }

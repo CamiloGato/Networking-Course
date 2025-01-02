@@ -57,7 +57,7 @@ namespace CarController
         private void HandleParticleEffects()
         {
             // If the car is drifting, ensure both ParticleSystems are playing.
-            if (car.isDrifting)
+            if (car.IsDrifting)
             {
                 if (!rlwParticleSystem.isPlaying)
                     rlwParticleSystem.Play();
@@ -82,8 +82,8 @@ namespace CarController
 
             // Condition for skid trails: traction locked OR local X velocity > 5,
             // and overall speed > 12.
-            bool shouldSkid = (car.isTractionLocked || Mathf.Abs(car.localVelocityX) > 5f)
-                              && Mathf.Abs(car.carSpeed) > 12f;
+            bool shouldSkid = (car.IsTractionLocked || Mathf.Abs(car.LocalVelocityX) > 5f)
+                              && Mathf.Abs(car.CarSpeed) > 12f;
 
             if (rlwTireSkid)
                 rlwTireSkid.emitting = shouldSkid;

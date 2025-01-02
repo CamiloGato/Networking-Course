@@ -46,12 +46,13 @@ namespace CarController
         public GameObject rearRightMesh;
         public WheelCollider rearRightCollider;
 
-        // Public variables
-        [HideInInspector] public float carSpeed; // Current approximate speed (km/h).
-        [HideInInspector] public bool isDrifting; // True when the car is drifting.
-        [HideInInspector] public bool isTractionLocked; // True when handbrake is locked.
-        [HideInInspector] public float localVelocityZ; // Local velocity in Z axis (forward/backward).
-        [HideInInspector] public float localVelocityX; // Local velocity in X axis (side to side).
+        // Properties
+        public float CarSpeed { get; private set; } // Current approximate speed (km/h).
+        public bool IsDrifting { get; private set; } // True when the car is drifting.
+        public bool IsTractionLocked { get; private set; } // True when handbrake is locked.
+        public float LocalVelocityZ { get; private set; } // Local velocity in Z axis (forward/backward).
+        public float LocalVelocityX { get; private set; } // Local velocity in X axis (side to side).
+        public float LinearVelocityMagnitude => _rb.linearVelocity.magnitude; // Magnitude of linear velocity.
 
         // Private variables.
         private Rigidbody _rb;
@@ -83,18 +84,18 @@ namespace CarController
         {
             // Approximate speed based on front-left wheel's RPM and circumference.
             // This is roughly in km/h.
-            carSpeed = (2f * Mathf.PI * frontLeftCollider.radius * frontLeftCollider.rpm * 60f) / 1000f;
+            CarSpeed = (2f * Mathf.PI * frontLeftCollider.radius * frontLeftCollider.rpm * 60f) / 1000f;
 
             // Local velocities (X and Z).
             // localVelocityZ > 0 means moving forward, < 0 means reversing.
-            localVelocityX = transform.InverseTransformDirection(_rb.linearVelocity).x;
-            localVelocityZ = transform.InverseTransformDirection(_rb.linearVelocity).z;
+            LocalVelocityX = transform.InverseTransformDirection(_rb.linearVelocity).x;
+            LocalVelocityZ = transform.InverseTransformDirection(_rb.linearVelocity).z;
 
             // Animate wheel meshes according to WheelColliders.
             AnimateWheelMeshes();
         }
 
-        #region PUBLIC METHODS (called from CarInput or others)
+        #region PUBLIC METHODS
 
         /// <summary>
         /// Accelerates the vehicle forward.
@@ -108,13 +109,13 @@ namespace CarController
             _throttleAxis = Mathf.Clamp(_throttleAxis, -1f, 1f);
 
             // If the car is moving backward, apply brakes before going forward.
-            if (localVelocityZ < -1f)
+            if (LocalVelocityZ < -1f)
             {
                 Brakes();
             }
             else
             {
-                if (Mathf.RoundToInt(carSpeed) < maxSpeed)
+                if (Mathf.RoundToInt(CarSpeed) < maxSpeed)
                 {
                     ApplyMotorTorque(_throttleAxis);
                 }
@@ -137,13 +138,13 @@ namespace CarController
             _throttleAxis = Mathf.Clamp(_throttleAxis, -1f, 1f);
 
             // If the car is moving forward, apply brakes before going reverse.
-            if (localVelocityZ > 1f)
+            if (LocalVelocityZ > 1f)
             {
                 Brakes();
             }
             else
             {
-                if (Mathf.Abs(Mathf.RoundToInt(carSpeed)) < maxReverseSpeed)
+                if (Mathf.Abs(Mathf.RoundToInt(CarSpeed)) < maxReverseSpeed)
                 {
                     ApplyMotorTorque(_throttleAxis);
                 }
@@ -203,7 +204,7 @@ namespace CarController
             Brakes();
 
             // The traction is locked (sliding).
-            isTractionLocked = true;
+            IsTractionLocked = true;
         }
 
         /// <summary>
@@ -211,7 +212,7 @@ namespace CarController
         /// </summary>
         public void RecoverTraction()
         {
-            isTractionLocked = false;
+            IsTractionLocked = false;
             _driftingAxis -= (Time.deltaTime / 1.5f);
 
             if (_driftingAxis > 0f)
@@ -273,14 +274,14 @@ namespace CarController
         private void CheckIfDrifting()
         {
             // Default: not drifting
-            isDrifting = false;
+            IsDrifting = false;
 
             // If we are moving forward (or basically not negative localVelocityZ).
-            if (localVelocityZ >= 0f)
+            if (LocalVelocityZ >= 0f)
             {
                 // Check if speed is above minimum to drift forward
-                isDrifting = Mathf.Abs(carSpeed) >= driftMinForwardSpeed &&
-                             Mathf.Abs(localVelocityX) > driftSidewaysThresholdForward;
+                IsDrifting = Mathf.Abs(CarSpeed) >= driftMinForwardSpeed &&
+                             Mathf.Abs(LocalVelocityX) > driftSidewaysThresholdForward;
             }
             else // localVelocityZ < 0 => reversing
             {
@@ -291,8 +292,8 @@ namespace CarController
                 }
 
                 // If we do allow reverse drifting, check thresholds
-                isDrifting = Mathf.Abs(carSpeed) >= driftMinReverseSpeed &&
-                             Mathf.Abs(localVelocityX) > driftSidewaysThresholdReverse;
+                IsDrifting = Mathf.Abs(CarSpeed) >= driftMinReverseSpeed &&
+                             Mathf.Abs(LocalVelocityX) > driftSidewaysThresholdReverse;
             }
         }
 

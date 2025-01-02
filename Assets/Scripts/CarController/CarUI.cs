@@ -16,7 +16,7 @@ namespace CarController
             if (car == null) return;
             if (speedText == null) return;
 
-            float absoluteCarSpeed = Mathf.Abs(car.carSpeed);
+            float absoluteCarSpeed = Mathf.Abs(car.CarSpeed);
             speedText.text = Mathf.RoundToInt(absoluteCarSpeed).ToString();
         }
     }
