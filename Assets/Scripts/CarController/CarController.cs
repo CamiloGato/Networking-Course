@@ -47,12 +47,30 @@ namespace CarController
         [SerializeField] private WheelCollider rearRightCollider;
 
         // Properties
-        public float CarSpeed { get; private set; } // Current approximate speed (km/h).
-        public bool IsDrifting { get; private set; } // True when the car is drifting.
-        public bool IsTractionLocked { get; private set; } // True when handbrake is locked.
-        public float LocalVelocityZ { get; private set; } // Local velocity in Z axis (forward/backward).
-        public float LocalVelocityX { get; private set; } // Local velocity in X axis (side to side).
-        public float LinearVelocityMagnitude => _rb.linearVelocity.magnitude; // Magnitude of linear velocity.
+        /// <summary>
+        /// Current approximate speed of the car (km/h). It's based on the front-left wheel's RPM.
+        /// </summary>
+        public float CarSpeed { get; private set; }
+        /// <summary>
+        /// True when the car is drifting. It affects friction and tire marks.
+        /// </summary>
+        public bool IsDrifting { get; private set; }
+        /// <summary>
+        /// True when handbrake is locked. It also applies braking torque.
+        /// </summary>
+        public bool IsTractionLocked { get; private set; }
+        /// <summary>
+        /// Local velocity in Z axis (forward/backward). Positive = forward, negative = reverse.
+        /// </summary>
+        public float LocalVelocityZ { get; private set; }
+        /// <summary>
+        /// Local velocity in X axis (side to side). Positive = right, negative = left.
+        /// </summary>
+        public float LocalVelocityX { get; private set; }
+        /// <summary>
+        /// Magnitude of linear velocity. Useful for speed comparisons.
+        /// </summary>
+        public float LinearVelocityMagnitude => _rb.linearVelocity.magnitude;
 
         // Private variables.
         private Rigidbody _rb;
