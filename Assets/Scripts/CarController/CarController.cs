@@ -9,42 +9,46 @@ namespace CarController
     [RequireComponent(typeof(Rigidbody))]
     public class CarController : MonoBehaviour
     {
-        [Header("CAR SETUP")] [Range(20, 190)] public int maxSpeed = 90;
-        [Range(10, 120)] public int maxReverseSpeed = 45;
-        [Range(1, 10)] public int accelerationMultiplier = 2;
-        [Range(10, 45)] public int maxSteeringAngle = 27;
-        [Range(0.1f, 1f)] public float steeringSpeed = 0.5f;
-        [Range(100, 600)] public int brakeForce = 350;
-        [Range(1, 10)] public int decelerationMultiplier = 2;
-        [Range(1, 10)] public int handbrakeDriftMultiplier = 5;
+        [Header("CAR SETUP")]
+        [Range(20, 190)] [SerializeField] private int maxSpeed = 90;
+        [Range(10, 120)] [SerializeField] private int maxReverseSpeed = 45;
+        [Range(1, 10)] [SerializeField] private int accelerationMultiplier = 2;
+        [Range(10, 45)] [SerializeField] private int maxSteeringAngle = 27;
+        [Range(0.1f, 1f)] [SerializeField] private float steeringSpeed = 0.5f;
+        [Range(100, 600)] [SerializeField] private int brakeForce = 350;
+        [Range(1, 10)] [SerializeField] private int decelerationMultiplier = 2;
+        [Range(1, 10)] [SerializeField] private int handbrakeDriftMultiplier = 5;
 
-        [Tooltip("Rigidbody center of mass.")] public Vector3 bodyMassCenter;
+        [Tooltip("Rigidbody center of mass.")]
+        [SerializeField] private Vector3 bodyMassCenter;
 
         [Space(10)]
         [Header("DRIFT TWEAKS")]
         [Tooltip("Allow drifting when reversing? If false, reverse won't trigger drifting.")]
-        public bool allowReverseDrift;
+        [SerializeField] private bool allowReverseDrift;
 
         [Tooltip("Sideways velocity threshold for forward drifting. Lower = easier drift.")]
-        public float driftSidewaysThresholdForward = 1.5f;
+        [SerializeField] private float driftSidewaysThresholdForward = 1.5f;
 
         [Tooltip("Sideways velocity threshold for reverse drifting. Increase to make reverse drifting harder.")]
-        public float driftSidewaysThresholdReverse = 3f;
+        [SerializeField] private float driftSidewaysThresholdReverse = 3f;
 
         [Tooltip("Minimum forward speed (km/h approx) required to drift going forward.")]
-        public float driftMinForwardSpeed = 5f;
+        [SerializeField] private float driftMinForwardSpeed = 5f;
 
         [Tooltip("Minimum reverse speed (km/h approx) required to drift going backward.")]
-        public float driftMinReverseSpeed = 5f;
+        [SerializeField] private float driftMinReverseSpeed = 5f;
 
-        [Space(10)] [Header("WHEELS")] public GameObject frontLeftMesh;
-        public WheelCollider frontLeftCollider;
-        public GameObject frontRightMesh;
-        public WheelCollider frontRightCollider;
-        public GameObject rearLeftMesh;
-        public WheelCollider rearLeftCollider;
-        public GameObject rearRightMesh;
-        public WheelCollider rearRightCollider;
+        [Space(10)]
+        [Header("WHEELS")]
+        [SerializeField] private GameObject frontLeftMesh;
+        [SerializeField] private WheelCollider frontLeftCollider;
+        [SerializeField] private GameObject frontRightMesh;
+        [SerializeField] private WheelCollider frontRightCollider;
+        [SerializeField] private GameObject rearLeftMesh;
+        [SerializeField] private WheelCollider rearLeftCollider;
+        [SerializeField] private GameObject rearRightMesh;
+        [SerializeField] private WheelCollider rearRightCollider;
 
         // Properties
         public float CarSpeed { get; private set; } // Current approximate speed (km/h).

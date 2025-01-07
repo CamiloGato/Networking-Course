@@ -8,14 +8,15 @@ namespace CarController
         [SerializeField] private CarController car;
         [SerializeField] private bool useSounds;
 
-        [Header("Audio Sources")] public AudioSource carEngineSound;
+        [Header("Audio Sources")]
+        public AudioSource carEngineSound;
         public AudioSource tireScreechSound;
 
         private float _initialCarEnginePitch;
 
         private void Start()
         {
-            if (carEngineSound != null)
+            if (carEngineSound)
             {
                 _initialCarEnginePitch = carEngineSound.pitch;
             }
@@ -29,13 +30,13 @@ namespace CarController
                 return;
             }
 
-            if (carEngineSound != null)
+            if (carEngineSound)
             {
                 float newPitch = _initialCarEnginePitch + Mathf.Abs(car.LinearVelocityMagnitude) / 25f;
                 carEngineSound.pitch = newPitch;
             }
 
-            if (tireScreechSound != null)
+            if (tireScreechSound)
             {
                 if ((car.IsDrifting) || (car.IsTractionLocked && Mathf.Abs(car.CarSpeed) > 12f))
                 {
@@ -50,12 +51,12 @@ namespace CarController
 
         private void StopSounds()
         {
-            if (carEngineSound != null && carEngineSound.isPlaying)
+            if (carEngineSound && carEngineSound.isPlaying)
             {
                 carEngineSound.Stop();
             }
 
-            if (tireScreechSound != null && tireScreechSound.isPlaying)
+            if (tireScreechSound && tireScreechSound.isPlaying)
             {
                 tireScreechSound.Stop();
             }

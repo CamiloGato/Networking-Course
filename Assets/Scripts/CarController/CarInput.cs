@@ -10,7 +10,6 @@ namespace CarController
         {
             if (!car) return;
 
-            // INPUT DE TECLADO
             if (Input.GetKey(KeyCode.W))
             {
                 car.StopDeceleration();
