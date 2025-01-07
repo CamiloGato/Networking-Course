@@ -6,9 +6,9 @@ namespace CarController
     /// Manages the visual effects (particle systems, tire skids)
     /// for the car based on the CarController state.
     /// </summary>
+    [RequireComponent(typeof(CarController))]
     public class CarEffects : MonoBehaviour
     {
-        [SerializeField] private CarController car;
         [SerializeField] private bool useEffects;
 
         public ParticleSystem rlwParticleSystem;
@@ -16,6 +16,13 @@ namespace CarController
 
         [Header("Trail Renderers")] public TrailRenderer rlwTireSkid;
         public TrailRenderer rrwTireSkid;
+        
+        private CarController _car;
+
+        private void Start()
+        {
+            _car = GetComponent<CarController>();
+        }
 
         private void Update()
         {
@@ -57,7 +64,7 @@ namespace CarController
         private void HandleParticleEffects()
         {
             // If the car is drifting, ensure both ParticleSystems are playing.
-            if (car.IsDrifting)
+            if (_car.IsDrifting)
             {
                 if (!rlwParticleSystem.isPlaying)
                     rlwParticleSystem.Play();
@@ -78,12 +85,12 @@ namespace CarController
         /// </summary>
         private void HandleSkidTrails()
         {
-            if (!car) return;
+            if (!_car) return;
 
             // Condition for skid trails: traction locked OR local X velocity > 5,
             // and overall speed > 12.
-            bool shouldSkid = (car.IsTractionLocked || Mathf.Abs(car.LocalVelocityX) > 5f)
-                              && Mathf.Abs(car.CarSpeed) > 12f;
+            bool shouldSkid = (_car.IsTractionLocked || Mathf.Abs(_car.LocalVelocityX) > 5f || Mathf.Abs(_car.LocalVelocityZ) > 5f)
+                              && Mathf.Abs(_car.CarSpeed) > 12f;
 
             if (rlwTireSkid)
                 rlwTireSkid.emitting = shouldSkid;

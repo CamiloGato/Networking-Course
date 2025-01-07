@@ -2,60 +2,64 @@
 
 namespace CarController
 {
+    [RequireComponent(typeof(CarController))]
     public class CarInput : MonoBehaviour
     {
-        [SerializeField] private CarController car;
+        private CarController _car;
+
+        private void Start()
+        {
+            _car = GetComponent<CarController>();
+        }
 
         private void Update()
         {
-            if (!car) return;
-
             if (Input.GetKey(KeyCode.W))
             {
-                car.StopDeceleration();
-                car.GoForward();
+                _car.StopDeceleration();
+                _car.GoForward();
             }
 
             if (Input.GetKey(KeyCode.S))
             {
-                car.StopDeceleration();
-                car.GoReverse();
+                _car.StopDeceleration();
+                _car.GoReverse();
             }
 
             if (Input.GetKey(KeyCode.A))
             {
-                car.TurnLeft();
+                _car.TurnLeft();
             }
 
             if (Input.GetKey(KeyCode.D))
             {
-                car.TurnRight();
+                _car.TurnRight();
             }
 
             if (Input.GetKey(KeyCode.Space))
             {
-                car.StopDeceleration();
-                car.Handbrake();
+                _car.StopDeceleration();
+                _car.Handbrake();
             }
 
             if (Input.GetKeyUp(KeyCode.Space))
             {
-                car.RecoverTraction();
+                _car.RecoverTraction();
             }
 
             if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
             {
-                car.ThrottleOff();
+                _car.ThrottleOff();
             }
 
             if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.Space))
             {
-                car.StartDeceleration();
+                _car.StartDeceleration();
             }
 
             if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
             {
-                car.ResetSteeringAngle();
+                _car.ResetSteeringAngle();
             }
         }
     }

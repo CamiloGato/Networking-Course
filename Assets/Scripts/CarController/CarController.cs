@@ -26,16 +26,12 @@ namespace CarController
         [Header("DRIFT TWEAKS")]
         [Tooltip("Allow drifting when reversing? If false, reverse won't trigger drifting.")]
         [SerializeField] private bool allowReverseDrift;
-
         [Tooltip("Sideways velocity threshold for forward drifting. Lower = easier drift.")]
         [SerializeField] private float driftSidewaysThresholdForward = 1.5f;
-
         [Tooltip("Sideways velocity threshold for reverse drifting. Increase to make reverse drifting harder.")]
         [SerializeField] private float driftSidewaysThresholdReverse = 3f;
-
         [Tooltip("Minimum forward speed (km/h approx) required to drift going forward.")]
         [SerializeField] private float driftMinForwardSpeed = 5f;
-
         [Tooltip("Minimum reverse speed (km/h approx) required to drift going backward.")]
         [SerializeField] private float driftMinReverseSpeed = 5f;
 
