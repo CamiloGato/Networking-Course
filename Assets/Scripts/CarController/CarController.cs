@@ -116,6 +116,29 @@ namespace CarController
         #region PUBLIC METHODS
 
         /// <summary>
+        /// Resets the car's velocity and angular velocity to zero.
+        /// </summary>
+        public void ResetCar()
+        {
+            _rb.linearVelocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+            
+            // Reset steering and throttle axis.
+            _steeringAxis = 0f;
+            _throttleAxis = 0f;
+            
+            // Reset friction values.
+            RestoreWheelFriction();
+            
+            // Reset flags.
+            IsDrifting = false;
+            IsTractionLocked = false;
+            
+            // Stop all InvokeRepeating calls.
+            StopAllCoroutines();
+        }
+        
+        /// <summary>
         /// Accelerates the vehicle forward.
         /// </summary>
         public void GoForward()

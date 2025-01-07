@@ -89,7 +89,7 @@ namespace CarController
 
             // Condition for skid trails: traction locked OR local X velocity > 5,
             // and overall speed > 12.
-            bool shouldSkid = (_car.IsTractionLocked || Mathf.Abs(_car.LocalVelocityX) > 5f || Mathf.Abs(_car.LocalVelocityZ) > 5f)
+            bool shouldSkid = (_car.IsTractionLocked || Mathf.Abs(_car.LocalVelocityX) > 5f || Mathf.Abs(_car.LocalVelocityZ) > 25f)
                               && Mathf.Abs(_car.CarSpeed) > 12f;
 
             if (rlwTireSkid)

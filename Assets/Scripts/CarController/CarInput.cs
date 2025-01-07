@@ -2,18 +2,26 @@
 
 namespace CarController
 {
+    [RequireComponent(typeof(CarSpawns))]
     [RequireComponent(typeof(CarController))]
     public class CarInput : MonoBehaviour
     {
         private CarController _car;
+        private CarSpawns _carSpawns;
 
         private void Start()
         {
             _car = GetComponent<CarController>();
+            _carSpawns = GetComponent<CarSpawns>();
         }
 
         private void Update()
         {
+            if (Input.GetKey(KeyCode.R) && _car.CarSpeed < 1f)
+            {
+                _carSpawns.Spawn();
+            }
+            
             if (Input.GetKey(KeyCode.W))
             {
                 _car.StopDeceleration();
